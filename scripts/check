@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/_common"
+.venv/bin/ruff check backend tools scripts tests
+.venv/bin/pytest tests/unit -q
+.venv/bin/python scripts/export-contracts.py
+npm --prefix frontend run types
+npm --prefix frontend test
+npm --prefix frontend run build

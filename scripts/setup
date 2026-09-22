@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+export UV_CACHE_DIR="${UV_CACHE_DIR:-/private/tmp/bold-maker-uv-cache}"
+command -v uv >/dev/null
+command -v node >/dev/null
+command -v ffmpeg >/dev/null
+command -v ffprobe >/dev/null
+uv sync --locked
+npm --prefix frontend ci --cache /private/tmp/bold-maker-npm-cache
+PYTHONPATH=. .venv/bin/python scripts/export-contracts.py
+npm --prefix frontend run types
+npm --prefix frontend run build

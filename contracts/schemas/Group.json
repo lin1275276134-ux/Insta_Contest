@@ -1,0 +1,84 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "revision": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Revision",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "storage_epoch": {
+      "default": "card_demo",
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Storage Epoch",
+      "type": "string"
+    },
+    "members": {
+      "items": {
+        "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Members",
+      "type": "array"
+    },
+    "sizes": {
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 1,
+      "title": "Sizes",
+      "type": "array"
+    },
+    "closed": {
+      "default": false,
+      "title": "Closed",
+      "type": "boolean"
+    },
+    "complete": {
+      "default": false,
+      "title": "Complete",
+      "type": "boolean"
+    },
+    "projection": {
+      "default": "unknown",
+      "enum": [
+        "rectilinear",
+        "unknown",
+        "panorama"
+      ],
+      "title": "Projection",
+      "type": "string"
+    },
+    "scenario": {
+      "default": "unrelated",
+      "enum": [
+        "materials",
+        "result",
+        "occluded",
+        "clear",
+        "unrelated",
+        "uncertain"
+      ],
+      "title": "Scenario",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "revision",
+    "name",
+    "members",
+    "sizes"
+  ],
+  "title": "Group",
+  "type": "object"
+}

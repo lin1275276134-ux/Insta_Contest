@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
+export UV_CACHE_DIR="${UV_CACHE_DIR:-/private/tmp/bold-maker-uv-cache}"
+if [[ ! -x .venv/bin/python ]]; then
+  echo '请先运行 scripts/setup' >&2
+  exit 1
+fi

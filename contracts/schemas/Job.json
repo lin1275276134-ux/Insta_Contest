@@ -1,0 +1,139 @@
+{
+  "$defs": {
+    "ErrorCode": {
+      "enum": [
+        "DEVICE_DISCONNECTED",
+        "CAPABILITY_UNVERIFIED",
+        "CATALOG_INCOMPLETE",
+        "SCOPE_STALE",
+        "GROUP_NOT_READY",
+        "DOWNLOAD_INCOMPLETE",
+        "MEDIA_UNSUPPORTED",
+        "STORAGE_FULL",
+        "NETWORK_UNAVAILABLE",
+        "MODEL_TIMEOUT",
+        "MODEL_OUTPUT_INVALID",
+        "STALE_REVISION",
+        "CONFLICT",
+        "NOT_FOUND",
+        "INVALID_INPUT"
+      ],
+      "title": "ErrorCode",
+      "type": "string"
+    },
+    "ErrorDetail": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable",
+        "action"
+      ],
+      "title": "ErrorDetail",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "project_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Project Id"
+    },
+    "kind": {
+      "title": "Kind",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "queued",
+        "running",
+        "retry_wait",
+        "succeeded",
+        "failed",
+        "cancelled"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "attempt": {
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ErrorDetail"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "result": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Result"
+    }
+  },
+  "required": [
+    "id",
+    "project_id",
+    "kind",
+    "state",
+    "attempt"
+  ],
+  "title": "Job",
+  "type": "object"
+}

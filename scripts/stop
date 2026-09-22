@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/_common"
+exec .venv/bin/python scripts/server.py stop

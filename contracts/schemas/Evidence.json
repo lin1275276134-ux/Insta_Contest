@@ -1,0 +1,73 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "shot_id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Shot Id",
+      "type": "string"
+    },
+    "criterion_id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Criterion Id",
+      "type": "string"
+    },
+    "clip_id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Clip Id",
+      "type": "string"
+    },
+    "rendition_id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Rendition Id",
+      "type": "string"
+    },
+    "start": {
+      "minimum": 0,
+      "title": "Start",
+      "type": "number"
+    },
+    "end": {
+      "exclusiveMinimum": 0,
+      "title": "End",
+      "type": "number"
+    },
+    "verdict": {
+      "enum": [
+        "supports",
+        "defect",
+        "uncertain"
+      ],
+      "title": "Verdict",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "continuous": {
+      "default": false,
+      "title": "Continuous",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "shot_id",
+    "criterion_id",
+    "clip_id",
+    "rendition_id",
+    "start",
+    "end",
+    "verdict",
+    "reason"
+  ],
+  "title": "Evidence",
+  "type": "object"
+}

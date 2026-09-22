@@ -1,0 +1,771 @@
+{
+  "$defs": {
+    "Clip": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "group_key": {
+          "title": "Group Key",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "awaiting_ready",
+            "downloading",
+            "preparing",
+            "analyzing",
+            "analyzed",
+            "failed",
+            "blocked_format",
+            "excluded",
+            "queued"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "active": {
+          "default": true,
+          "title": "Active",
+          "type": "boolean"
+        },
+        "generation": {
+          "default": 1,
+          "title": "Generation",
+          "type": "integer"
+        },
+        "rendition_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rendition Id"
+        },
+        "duration": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ErrorDetail"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "group_key",
+        "state"
+      ],
+      "title": "Clip",
+      "type": "object"
+    },
+    "Criterion": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "description": {
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Description",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "continuous": {
+          "default": false,
+          "title": "Continuous",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "description"
+      ],
+      "title": "Criterion",
+      "type": "object"
+    },
+    "ErrorCode": {
+      "enum": [
+        "DEVICE_DISCONNECTED",
+        "CAPABILITY_UNVERIFIED",
+        "CATALOG_INCOMPLETE",
+        "SCOPE_STALE",
+        "GROUP_NOT_READY",
+        "DOWNLOAD_INCOMPLETE",
+        "MEDIA_UNSUPPORTED",
+        "STORAGE_FULL",
+        "NETWORK_UNAVAILABLE",
+        "MODEL_TIMEOUT",
+        "MODEL_OUTPUT_INVALID",
+        "STALE_REVISION",
+        "CONFLICT",
+        "NOT_FOUND",
+        "INVALID_INPUT"
+      ],
+      "title": "ErrorCode",
+      "type": "string"
+    },
+    "ErrorDetail": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/ErrorCode"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable",
+        "action"
+      ],
+      "title": "ErrorDetail",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "shot_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "criterion_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "clip_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Clip Id",
+          "type": "string"
+        },
+        "rendition_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Rendition Id",
+          "type": "string"
+        },
+        "start": {
+          "minimum": 0,
+          "title": "Start",
+          "type": "number"
+        },
+        "end": {
+          "exclusiveMinimum": 0,
+          "title": "End",
+          "type": "number"
+        },
+        "verdict": {
+          "enum": [
+            "supports",
+            "defect",
+            "uncertain"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "reason": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        },
+        "continuous": {
+          "default": false,
+          "title": "Continuous",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "shot_id",
+        "criterion_id",
+        "clip_id",
+        "rendition_id",
+        "start",
+        "end",
+        "verdict",
+        "reason"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Job": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "project_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Project Id"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running",
+            "retry_wait",
+            "succeeded",
+            "failed",
+            "cancelled"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "attempt": {
+          "title": "Attempt",
+          "type": "integer"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ErrorDetail"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "result": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Result"
+        }
+      },
+      "required": [
+        "id",
+        "project_id",
+        "kind",
+        "state",
+        "attempt"
+      ],
+      "title": "Job",
+      "type": "object"
+    },
+    "NextAction": {
+      "additionalProperties": false,
+      "properties": {
+        "project_revision": {
+          "title": "Project Revision",
+          "type": "integer"
+        },
+        "shot_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "what": {
+          "title": "What",
+          "type": "string"
+        },
+        "how": {
+          "title": "How",
+          "type": "string"
+        },
+        "why": {
+          "title": "Why",
+          "type": "string"
+        }
+      },
+      "required": [
+        "project_revision",
+        "shot_id",
+        "what",
+        "how",
+        "why"
+      ],
+      "title": "NextAction",
+      "type": "object"
+    },
+    "Project": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "goal": {
+          "title": "Goal",
+          "type": "string"
+        },
+        "target_seconds": {
+          "title": "Target Seconds",
+          "type": "integer"
+        },
+        "conditions": {
+          "title": "Conditions",
+          "type": "string"
+        },
+        "revision": {
+          "title": "Revision",
+          "type": "integer"
+        },
+        "plan_version": {
+          "title": "Plan Version",
+          "type": "integer"
+        },
+        "confirmed": {
+          "title": "Confirmed",
+          "type": "boolean"
+        },
+        "shots": {
+          "items": {
+            "$ref": "#/$defs/Shot"
+          },
+          "title": "Shots",
+          "type": "array"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "goal",
+        "target_seconds",
+        "conditions",
+        "revision",
+        "plan_version",
+        "confirmed",
+        "shots",
+        "created_at"
+      ],
+      "title": "Project",
+      "type": "object"
+    },
+    "Session": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "project_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "device_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Device Id",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "watching",
+            "awaiting_scope",
+            "paused",
+            "disconnected",
+            "error",
+            "closed"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "last_complete_scan_at": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Complete Scan At"
+        },
+        "membership": {
+          "additionalProperties": {
+            "enum": [
+              "included",
+              "excluded",
+              "pending_confirmation"
+            ],
+            "type": "string"
+          },
+          "title": "Membership",
+          "type": "object"
+        },
+        "storage_epoch": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Storage Epoch"
+        }
+      },
+      "required": [
+        "id",
+        "project_id",
+        "device_id",
+        "state",
+        "snapshot_id",
+        "membership"
+      ],
+      "title": "Session",
+      "type": "object"
+    },
+    "Shot": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "critical": {
+          "default": false,
+          "title": "Critical",
+          "type": "boolean"
+        },
+        "criteria": {
+          "items": {
+            "$ref": "#/$defs/Criterion"
+          },
+          "maxItems": 20,
+          "minItems": 1,
+          "title": "Criteria",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "criteria"
+      ],
+      "title": "Shot",
+      "type": "object"
+    },
+    "ShotCoverage": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "required": {
+          "title": "Required",
+          "type": "boolean"
+        },
+        "state": {
+          "enum": [
+            "pending",
+            "covered",
+            "reshoot",
+            "uncertain"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "evidence_ids": {
+          "items": {
+            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+            "type": "string"
+          },
+          "title": "Evidence Ids",
+          "type": "array"
+        },
+        "missing": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Missing",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "required",
+        "state",
+        "evidence_ids",
+        "missing"
+      ],
+      "title": "ShotCoverage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "project": {
+      "$ref": "#/$defs/Project"
+    },
+    "project_id": {
+      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "revision": {
+      "title": "Revision",
+      "type": "integer"
+    },
+    "plan_version": {
+      "title": "Plan Version",
+      "type": "integer"
+    },
+    "camera_mode": {
+      "enum": [
+        "simulator",
+        "unconfigured"
+      ],
+      "title": "Camera Mode",
+      "type": "string"
+    },
+    "model_mode": {
+      "enum": [
+        "simulator",
+        "unconfigured"
+      ],
+      "title": "Model Mode",
+      "type": "string"
+    },
+    "sync": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Session"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "pending_scope_count": {
+      "title": "Pending Scope Count",
+      "type": "integer"
+    },
+    "pipeline": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Pipeline",
+      "type": "object"
+    },
+    "clips": {
+      "items": {
+        "$ref": "#/$defs/Clip"
+      },
+      "title": "Clips",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "shots": {
+      "items": {
+        "$ref": "#/$defs/ShotCoverage"
+      },
+      "title": "Shots",
+      "type": "array"
+    },
+    "coverage_complete": {
+      "title": "Coverage Complete",
+      "type": "boolean"
+    },
+    "readiness": {
+      "enum": [
+        "not_ready",
+        "checking",
+        "unverified",
+        "ready"
+      ],
+      "title": "Readiness",
+      "type": "string"
+    },
+    "checked_at": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Checked At"
+    },
+    "verified_snapshot_id": {
+      "anyOf": [
+        {
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Verified Snapshot Id"
+    },
+    "next_action": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NextAction"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "jobs": {
+      "items": {
+        "$ref": "#/$defs/Job"
+      },
+      "title": "Jobs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "project",
+    "project_id",
+    "revision",
+    "plan_version",
+    "camera_mode",
+    "model_mode",
+    "sync",
+    "pending_scope_count",
+    "pipeline",
+    "clips",
+    "evidence",
+    "shots",
+    "coverage_complete",
+    "readiness",
+    "checked_at",
+    "verified_snapshot_id",
+    "next_action",
+    "jobs"
+  ],
+  "title": "Snapshot",
+  "type": "object"
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/_common"
+if [[ "${1:-}" == '--simulate' ]]; then
+  export BOLD_SIMULATION=1
+  .venv/bin/python -m tools.simulator seed
+fi
+.venv/bin/python -m uvicorn backend.app.api.main:app --host 127.0.0.1 --port 8765 &
+backend_pid=$!
+trap 'kill "$backend_pid" "$frontend_pid" 2>/dev/null || true; wait || true' EXIT INT TERM
+npm --prefix frontend run dev &
+frontend_pid=$!
+wait

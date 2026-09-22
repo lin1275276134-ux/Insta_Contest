@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/_common"
+cat >&2 <<'TEXT'
+未运行：G0/G1 尚无验证后的真实适配器，真实模型尚未配置。
+不能用模拟器代替真机测试。下一步见 docs/device-probe.md。
+已知设备：X5 固件 v1.11.6，MCU v1.2.5，硬件 523（用户提供）。
+TEXT
+exit 2
