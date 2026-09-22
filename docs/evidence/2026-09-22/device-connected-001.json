@@ -1,0 +1,63 @@
+{
+  "kind": "device",
+  "captured_at": "2026-09-22T07:44:24.356833+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "gate_status": "unverified",
+  "capabilities": {
+    "history_video_listing": "unknown",
+    "listing_during_recording": "unknown",
+    "download_during_recording": "unknown",
+    "group_metadata": "unknown",
+    "readiness_signal": "unknown"
+  },
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/osc/info",
+      "status": 200,
+      "response": {
+        "manufacturer": "Arashi Vision",
+        "model": "Insta360 X5",
+        "serialNumber": "[redacted]",
+        "firmwareVersion": "A3_1.11.6.523_build1",
+        "supportUrl": "[redacted URL]",
+        "endpoints": {
+          "httpPort": 80,
+          "httpUpdatesPort": 10080
+        },
+        "gps": "[redacted]",
+        "gyro": true,
+        "uptime": 221,
+        "api": [
+          "/osc/info",
+          "/osc/state",
+          "/osc/checkForUpdates",
+          "/osc/commands/execute",
+          "/osc/commands/status"
+        ],
+        "apiLevel": [
+          2
+        ],
+        "_sensorModuleType": "Dual_Fisheye",
+        "_vendorVersion": "v1.1_build1"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/osc/state",
+      "status": 200,
+      "response": {
+        "fingerprint": "FPR_221130",
+        "state": {
+          "_cardState": "pass",
+          "batteryLevel": 0.25,
+          "storageUri": "[redacted URL]"
+        }
+      }
+    }
+  ]
+}

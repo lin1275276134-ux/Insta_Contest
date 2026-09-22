@@ -1,0 +1,78 @@
+{
+  "kind": "media",
+  "captured_at": "2026-09-22T08:02:58.808978+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "gate_status": "unverified",
+  "files": [
+    {
+      "name": "VID_20260922_155953_00_079.mp4",
+      "projection": "unknown",
+      "group_completeness": "unknown",
+      "bytes": 71142538,
+      "sha256": "8b97879978056a04d0d0113bb22bbc6cb9a7c648ce187de24ba878c4ce8bb43d",
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "12.345667",
+        "size": "71142538",
+        "bit_rate": "46100409"
+      },
+      "streams": [
+        {
+          "index": 0,
+          "codec_type": "video",
+          "codec_name": "hevc",
+          "width": 1920,
+          "height": 1080,
+          "duration": "12.345667",
+          "r_frame_rate": "30000/1001",
+          "pix_fmt": "yuvj420p"
+        },
+        {
+          "index": 1,
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "duration": "12.288000",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "status": "metadata_only"
+    },
+    {
+      "name": "LRV_20260922_155953_01_079.lrv",
+      "projection": "unknown",
+      "group_completeness": "unknown",
+      "bytes": 12684426,
+      "sha256": "b6fdbf5f8ef088c5ef5c1d8c3b78af6348599de29c6d786f90d52afef376a632",
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "12.345667",
+        "size": "12684426",
+        "bit_rate": "8219516"
+      },
+      "streams": [
+        {
+          "index": 0,
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1280,
+          "height": 720,
+          "duration": "12.345667",
+          "r_frame_rate": "30000/1001",
+          "pix_fmt": "yuvj420p"
+        },
+        {
+          "index": 1,
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "duration": "12.288000",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "status": "metadata_only"
+    }
+  ]
+}

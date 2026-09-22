@@ -1,0 +1,43 @@
+{
+  "kind": "single_lens_comparison",
+  "captured_at": "2026-09-22T08:02:09.945428+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "gate_status": "unverified",
+  "baseline_count": 108,
+  "after_count": 110,
+  "added": [
+    {
+      "name": "VID_20260922_155953_00_079.mp4",
+      "fileUrl": "[redacted URL]",
+      "_localFileUrl": "/DCIM/Camera01/VID_20260922_155953_00_079.mp4",
+      "size": 71142538,
+      "width": 6080,
+      "height": 3040,
+      "dateTimeZone": "",
+      "_dateTime": "2026:09:22 07:59:52+08:00",
+      "thumbnail": "",
+      "isProcessed": true,
+      "previewUrl": ""
+    },
+    {
+      "name": "LRV_20260922_155953_01_079.lrv",
+      "fileUrl": "[redacted URL]",
+      "_localFileUrl": "/DCIM/Camera01/LRV_20260922_155953_01_079.lrv",
+      "size": 12684426,
+      "width": 6080,
+      "height": 3040,
+      "dateTimeZone": "",
+      "_dateTime": "2026:09:22 07:59:52+08:00",
+      "thumbnail": "",
+      "isProcessed": true,
+      "previewUrl": ""
+    }
+  ],
+  "removed": [],
+  "changed": [],
+  "stable": true
+}

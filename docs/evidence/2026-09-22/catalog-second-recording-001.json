@@ -1,0 +1,1607 @@
+{
+  "kind": "catalog_experiment",
+  "captured_at": "2026-09-22T07:52:40.521157+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "gate_status": "unverified",
+  "pages": [
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 0,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260723_223507_003.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260723_223507_003.lrv",
+              "size": 36603524,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260723_223507_003.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260723_223507_003.mp4",
+              "size": 208307844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260723_223559_004.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260723_223559_004.lrv",
+              "size": 42632837,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:58+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260723_223559_004.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260723_223559_004.mp4",
+              "size": 249464453,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:58+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260723_224432_005.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260723_224432_005.lrv",
+              "size": 53905030,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:44:32+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260723_224432_005.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260723_224432_005.mp4",
+              "size": 528385671,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:44:32+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260723_234043_006.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260723_234043_006.lrv",
+              "size": 672564870,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 15:40:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260723_234043_006.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260723_234043_006.mp4",
+              "size": 7000000000.0,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 15:40:42+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_000427_008.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_000427_008.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:04:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_000427_008.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_000427_008.mp4",
+              "size": 1099335301,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:04:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_001023_009.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_001023_009.lrv",
+              "size": 156927622,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:10:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_001023_009.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_001023_009.mp4",
+              "size": 1165133447,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:10:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_001332_010.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_001332_010.lrv",
+              "size": 156927622,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:13:32+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_001332_010.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_001332_010.mp4",
+              "size": 1108248199,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:13:32+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_001637_011.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_001637_011.lrv",
+              "size": 155354758,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:16:36+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 15,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "VID_20260724_001637_011.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_001637_011.mp4",
+              "size": 1159890567,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:16:36+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_002423_012.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_002423_012.lrv",
+              "size": 8029826,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:24:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_002423_012.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_002423_012.mp4",
+              "size": 37127810,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:24:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_004810_021.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_004810_021.lrv",
+              "size": 74352259,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:48:10+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_004810_021.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_004810_021.mp4",
+              "size": 558794372,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:48:10+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_004329_013.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_004329_013.lrv",
+              "size": 7505539,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:43:28+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_004329_013.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_004329_013.mp4",
+              "size": 19302019,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:43:28+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_004644_020.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_004644_020.lrv",
+              "size": 71992962,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:46:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_004644_020.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_004644_020.mp4",
+              "size": 515802755,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:46:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_005527_025.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_005527_025.lrv",
+              "size": 11175556,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:55:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_005527_025.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_005527_025.mp4",
+              "size": 51807876,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 16:55:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_013844_026.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_013844_026.lrv",
+              "size": 9078403,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 17:38:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_013844_026.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_013844_026.mp4",
+              "size": 36079235,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 17:38:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_014850_027.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_014850_027.lrv",
+              "size": 15894147,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 17:48:50+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_014850_027.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_014850_027.mp4",
+              "size": 135169667,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 17:48:50+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 30,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260724_015327_028.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_015327_028.lrv",
+              "size": 6194818,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 17:53:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_015327_028.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_015327_028.mp4",
+              "size": 18253442,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 17:53:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_083436_030.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_083436_030.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 00:34:36+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_083436_030.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_083436_030.mp4",
+              "size": 1168017029,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 00:34:36+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_083346_029.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_083346_029.lrv",
+              "size": 16680577,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 00:33:46+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_083346_029.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_083346_029.mp4",
+              "size": 137791105,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 00:33:46+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_084732_031.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_084732_031.lrv",
+              "size": 375555715,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 00:47:32+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_084732_031.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_084732_031.mp4",
+              "size": 4000000000.0,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 00:47:32+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_100614_032.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_100614_032.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 02:06:14+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_100614_032.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_100614_032.mp4",
+              "size": 1199474309,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 02:06:14+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_100925_033.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_100925_033.lrv",
+              "size": 75400833,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 02:09:24+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_100925_033.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_100925_033.mp4",
+              "size": 786859650,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 02:09:24+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_101136_034.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_101136_034.lrv",
+              "size": 15894145,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 02:11:36+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_101136_034.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_101136_034.mp4",
+              "size": 130975361,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 02:11:36+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_163621_035.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_163621_035.lrv",
+              "size": 18253441,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 08:36:20+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 45,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "VID_20260724_163621_035.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_163621_035.mp4",
+              "size": 158500481,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 08:36:20+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_163648_036.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_163648_036.lrv",
+              "size": 6719107,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 08:36:48+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_163648_036.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_163648_036.mp4",
+              "size": 17204867,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 08:36:48+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_183546_038.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_183546_038.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:35:46+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_183546_038.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_183546_038.mp4",
+              "size": 1149142661,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:35:46+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_183450_037.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_183450_037.lrv",
+              "size": 29001345,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:34:50+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_183450_037.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_183450_037.mp4",
+              "size": 274105986,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:34:50+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_184029_039.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_184029_039.lrv",
+              "size": 25069187,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:40:28+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_184029_039.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_184029_039.mp4",
+              "size": 232949379,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:40:28+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_184430_040.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_184430_040.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:44:30+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_184430_040.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_184430_040.mp4",
+              "size": 1188202117,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:44:30+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_185050_041.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_185050_041.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:50:50+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_185050_041.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_185050_041.mp4",
+              "size": 1195804293,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 10:50:50+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_191349_042.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_191349_042.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 11:13:48+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_191349_042.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_191349_042.mp4",
+              "size": 1196328581,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 11:13:48+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 60,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260724_192122_043.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_192122_043.lrv",
+              "size": 105023108,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 11:21:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_192122_043.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_192122_043.mp4",
+              "size": 1155434117,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 11:21:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_195807_044.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_195807_044.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 11:58:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_195807_044.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_195807_044.mp4",
+              "size": 1230407301,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 11:58:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_200124_045.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_200124_045.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:01:24+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_200124_045.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_200124_045.mp4",
+              "size": 1207076485,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:01:24+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_201516_046.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_201516_046.lrv",
+              "size": 9864834,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:15:16+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_201516_046.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_201516_046.mp4",
+              "size": 60196482,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:15:16+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_201935_047.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_201935_047.lrv",
+              "size": 87459460,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:19:34+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_201935_047.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_201935_047.mp4",
+              "size": 936806021,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:19:34+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_203152_048.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_203152_048.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:31:52+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_203152_048.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_203152_048.mp4",
+              "size": 1223067269,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:31:52+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_204913_050.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_204913_050.lrv",
+              "size": 37914243,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:49:12+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_204913_050.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_204913_050.mp4",
+              "size": 384468612,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:49:12+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_204026_049.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_204026_049.lrv",
+              "size": 35030659,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:40:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 75,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "VID_20260724_204026_049.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_204026_049.mp4",
+              "size": 343049860,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 12:40:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260724_210238_051.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260724_210238_051.lrv",
+              "size": 48137859,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 13:02:38+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260724_210238_051.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260724_210238_051.mp4",
+              "size": 493258372,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:24 13:02:38+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_161004_052.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_161004_052.lrv",
+              "size": 105547396,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 08:10:04+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_161004_052.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_161004_052.mp4",
+              "size": 1085965957,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 08:10:04+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_190923_054.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_190923_054.lrv",
+              "size": 71730819,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:09:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_190923_054.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_190923_054.mp4",
+              "size": 766936708,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:09:22+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_190326_053.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_190326_053.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:03:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_190326_053.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_190326_053.mp4",
+              "size": 1170638469,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:03:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_195821_055.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_195821_055.lrv",
+              "size": 32933507,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:58:20+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_195821_055.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_195821_055.mp4",
+              "size": 317621892,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:58:20+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_195944_056.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_195944_056.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:59:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_195944_056.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_195944_056.mp4",
+              "size": 1202882181,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 11:59:44+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_205731_057.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_205731_057.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 12:57:30+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_205731_057.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_205731_057.mp4",
+              "size": 1162249861,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 12:57:30+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 90,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260725_214905_058.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_214905_058.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 13:49:04+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_214905_058.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_214905_058.mp4",
+              "size": 1161463429,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 13:49:04+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_224943_059.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_224943_059.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 14:49:42+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_224943_059.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_224943_059.mp4",
+              "size": 1209435781,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 14:49:42+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_230252_060.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_230252_060.lrv",
+              "size": 110265988,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 15:02:52+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_230252_060.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_230252_060.mp4",
+              "size": 1181648517,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 15:02:52+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260725_233828_061.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260725_233828_061.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 15:38:28+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260725_233828_061.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260725_233828_061.mp4",
+              "size": 1204979333,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 15:38:28+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260726_002126_062.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260726_002126_062.lrv",
+              "size": 110003844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 16:21:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260726_002126_062.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260726_002126_062.mp4",
+              "size": 1155958405,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:25 16:21:26+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260922_105307_00_066.insv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260922_105307_00_066.insv",
+              "size": 145936732,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 02:53:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260922_105307_01_066.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260922_105307_01_066.lrv",
+              "size": 38457686,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 02:53:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260922_152807_00_076.insv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260922_152807_00_076.insv",
+              "size": 233754972,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 07:28:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260922_152807_01_076.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260922_152807_01_076.lrv",
+              "size": 34263382,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 07:28:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260922_154624_00_077.insv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260922_154624_00_077.insv",
+              "size": 157208926,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 07:46:24+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 15
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 105,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260922_154624_01_077.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260922_154624_01_077.lrv",
+              "size": 27185496,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 07:46:24+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260922_155056_00_078.insv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260922_155056_00_078.insv",
+              "size": 162713950,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 07:50:56+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "LRV_20260922_155056_01_078.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260922_155056_01_078.lrv",
+              "size": 27447640,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:09:22 07:50:56+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 3
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 108,
+          "entryCount": 20,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [],
+          "totalEntries": 0
+        }
+      }
+    }
+  ],
+  "termination": "empty_page",
+  "completeness": "unverified",
+  "unique_entries": 108
+}

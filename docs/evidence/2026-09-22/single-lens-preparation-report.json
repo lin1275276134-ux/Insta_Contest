@@ -1,0 +1,23 @@
+{
+  "source": "VID_20260922_155953_00_079.mp4",
+  "projection_basis": "User selected single lens video; source frame visually inspected as flat view",
+  "renditions": [
+    {
+      "id": "rendition_a3ee9e81282641d48832d44f9db0cd73",
+      "path": "data/probes/media-single-lens/renditions/rendition_a3ee9e81282641d48832d44f9db0cd73.mp4",
+      "duration": 12.345667,
+      "sha256": "c7419a443bbb20a7e025bc364d205d8a8313a01c47c832871e9746c0c95f4b0a",
+      "source_index": 0,
+      "source_start": 0.0,
+      "group_start": 0.0,
+      "source_duration": 12.345667,
+      "projection": "rectilinear",
+      "profile": "h264-960-v1"
+    }
+  ],
+  "source_full_decode": "passed via prepare",
+  "rendition_full_decode": "passed",
+  "browser_playback": "not_tested",
+  "real_model": "not_configured",
+  "scope": "single real sample only; not overall G1 acceptance"
+}

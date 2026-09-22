@@ -1,0 +1,107 @@
+{
+  "kind": "catalog_experiment",
+  "captured_at": "2026-09-22T07:45:24.398568+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "gate_status": "unverified",
+  "basis": "Google OSC level 2 camera.listFiles; X5 support under test",
+  "requests": [
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 0,
+          "entryCount": 2,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260723_223507_003.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260723_223507_003.lrv",
+              "size": 36603524,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260723_223507_003.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260723_223507_003.mp4",
+              "size": 208307844,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:06+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 2
+        }
+      }
+    },
+    {
+      "request": {
+        "name": "camera.listFiles",
+        "parameters": {
+          "fileType": "video",
+          "startPosition": 2,
+          "entryCount": 2,
+          "maxThumbSize": null
+        }
+      },
+      "status": 200,
+      "response": {
+        "name": "camera.listFiles",
+        "state": "done",
+        "results": {
+          "entries": [
+            {
+              "name": "LRV_20260723_223559_004.lrv",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/LRV_20260723_223559_004.lrv",
+              "size": 42632837,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:58+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            },
+            {
+              "name": "VID_20260723_223559_004.mp4",
+              "fileUrl": "[redacted URL]",
+              "_localFileUrl": "/DCIM/Camera01/VID_20260723_223559_004.mp4",
+              "size": 249464453,
+              "width": 6080,
+              "height": 3040,
+              "dateTimeZone": "",
+              "_dateTime": "2026:07:23 14:35:58+08:00",
+              "thumbnail": "",
+              "isProcessed": true,
+              "previewUrl": ""
+            }
+          ],
+          "totalEntries": 2
+        }
+      }
+    }
+  ]
+}

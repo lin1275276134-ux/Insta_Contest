@@ -1,0 +1,88 @@
+{
+  "kind": "media",
+  "captured_at": "2026-09-22T07:54:48.623802+00:00",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64"
+  },
+  "gate_status": "unverified",
+  "files": [
+    {
+      "name": "VID_20260922_155056_00_078.insv",
+      "projection": "unknown",
+      "group_completeness": "unknown",
+      "bytes": 162713950,
+      "sha256": "4c97289ca444736612c52d8a65bd5b1f71b03f92cd38db3ae597a0ebe8ddee6d",
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "12.529183",
+        "size": "162713950",
+        "bit_rate": "103894372"
+      },
+      "streams": [
+        {
+          "index": 0,
+          "codec_type": "video",
+          "codec_name": "hevc",
+          "width": 1920,
+          "height": 1920,
+          "duration": "12.529183",
+          "r_frame_rate": "60000/1001",
+          "pix_fmt": "yuvj420p"
+        },
+        {
+          "index": 1,
+          "codec_type": "video",
+          "codec_name": "hevc",
+          "width": 1920,
+          "height": 1920,
+          "duration": "12.529183",
+          "r_frame_rate": "60000/1001",
+          "pix_fmt": "yuvj420p"
+        },
+        {
+          "index": 2,
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "duration": "12.480000",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "status": "metadata_only"
+    },
+    {
+      "name": "LRV_20260922_155056_01_078.lrv",
+      "projection": "unknown",
+      "group_completeness": "unknown",
+      "bytes": 27447640,
+      "sha256": "590c3b3c4df2021a53791cc4880304ea6d9b0a1c6cc5d8c2dda461c9d32626bf",
+      "format": {
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "duration": "12.545867",
+        "size": "27447640",
+        "bit_rate": "17502267"
+      },
+      "streams": [
+        {
+          "index": 0,
+          "codec_type": "video",
+          "codec_name": "h264",
+          "width": 1664,
+          "height": 832,
+          "duration": "12.545867",
+          "r_frame_rate": "30000/1001",
+          "pix_fmt": "yuvj420p"
+        },
+        {
+          "index": 1,
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "duration": "12.480000",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "status": "metadata_only"
+    }
+  ]
+}
