@@ -62,79 +62,87 @@
       ],
       "title": "ErrorDetail",
       "type": "object"
+    },
+    "ImportItem": {
+      "additionalProperties": false,
+      "properties": {
+        "filename": {
+          "title": "Filename",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "duplicate",
+            "failed"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "clip_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clip Id"
+        },
+        "job_id": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Job Id"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ErrorDetail"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "filename",
+        "status"
+      ],
+      "title": "ImportItem",
+      "type": "object"
     }
   },
   "additionalProperties": false,
   "properties": {
-    "id": {
-      "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-      "title": "Id",
-      "type": "string"
-    },
-    "project_id": {
-      "anyOf": [
-        {
-          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Project Id"
-    },
-    "kind": {
-      "title": "Kind",
-      "type": "string"
-    },
-    "state": {
-      "enum": [
-        "queued",
-        "running",
-        "retry_wait",
-        "succeeded",
-        "failed",
-        "cancelled"
-      ],
-      "title": "State",
-      "type": "string"
-    },
-    "attempt": {
-      "title": "Attempt",
+    "revision": {
+      "title": "Revision",
       "type": "integer"
     },
-    "error": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/ErrorDetail"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null
-    },
-    "result": {
-      "anyOf": [
-        {
-          "additionalProperties": true,
-          "type": "object"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null,
-      "title": "Result"
+    "items": {
+      "items": {
+        "$ref": "#/$defs/ImportItem"
+      },
+      "title": "Items",
+      "type": "array"
     }
   },
   "required": [
-    "id",
-    "project_id",
-    "kind",
-    "state",
-    "attempt"
+    "revision",
+    "items"
   ],
-  "title": "Job",
+  "title": "ImportBatch",
   "type": "object"
 }

@@ -21,20 +21,12 @@ class Worker:
         self.scan_thread = None
 
     def start(self):
-        # Restart never silently claims files recorded while this process was absent.
-        with self.repo.transaction() as db:
-            for p in self.repo.projects(db):
-                if p['sync'] and p['sync']['state'] == 'watching':
-                    p['sync']['state'] = 'disconnected'
-                    self.repo.save(db, p)
         self.thread = threading.Thread(target=self.loop, daemon=True, name='pipeline-worker')
-        self.scan_thread = threading.Thread(target=self.scan_loop, daemon=True, name='catalog-scanner')
         self.thread.start()
-        self.scan_thread.start()
 
     def stop(self):
         self.stopping.set()
-        for thread in (self.thread, self.scan_thread):
+        for thread in (self.thread,):
             if thread:
                 thread.join(timeout=5)
 
@@ -80,41 +72,62 @@ class Worker:
         p, c = self.phase(job, 'downloading')
         attempt_dir = self.settings.data_dir / 'tmp' / f"{job['id']}_{job['attempt']}"
         attempt_dir.mkdir(parents=True, exist_ok=True)
-        if c.get('local_source'):
+        renditions = [r for r in p['renditions'] if r['clip_id'] == c['id']]
+        cached = (c.get('prepared_generation') == c['generation'] and renditions
+                  and {r['id'] for r in renditions} == set(c.get('prepared_rendition_ids', []))
+                  and all(Path(r['path']).is_file() and digest(Path(r['path'])) == r['sha256'] for r in renditions))
+        if not cached:
+            if not c.get('local_source'):
+                raise DomainError('INVALID_INPUT', '旧相机素材需重新从本地导入', action='import_local')
             paths = [Path(c['local_source'])]
             projection = c['projection']
-        else:
-            paths = self.service.camera.download(c['group'], attempt_dir)
-            projection = c['group']['projection']
-        original_dir = self.settings.data_dir / 'originals' / c['id']
-        original_dir.mkdir(parents=True, exist_ok=True)
-        originals = []
-        for i, source in enumerate(paths):
-            dest = original_dir / f"{c['generation']}_{i}.media"
-            temp = dest.with_suffix('.part')
-            shutil.copyfile(source, temp)
-            temp.replace(dest)
-            originals.append(dest)
-        self.phase(job, 'preparing')
-        rendition_dir = self.settings.data_dir / 'renditions' / f"{c['id']}_{job['attempt']}"
-        renditions = prepare(originals, projection, rendition_dir, self.settings)
+            original_dir = self.settings.data_dir / 'originals' / c['id']
+            original_dir.mkdir(parents=True, exist_ok=True)
+            originals = []
+            for i, source in enumerate(paths):
+                dest = original_dir / f"{c['generation']}_{i}.media"
+                temp = dest.with_suffix('.part')
+                shutil.copyfile(source, temp)
+                temp.replace(dest)
+                originals.append(dest)
+            self.phase(job, 'preparing')
+            rendition_dir = self.settings.data_dir / 'renditions' / f"{c['id']}_{job['attempt']}"
+            renditions = prepare(originals, projection, rendition_dir, self.settings)
+            # Keep prepared media accessible even when the model is offline or unconfigured.
+            with self.repo.transaction() as db:
+                p, current = self.current_clip(db, job)
+                current.update(rendition_id=renditions[0]['id'], duration=sum(r['duration'] for r in renditions),
+                               prepared_generation=c['generation'], prepared_rendition_ids=[r['id'] for r in renditions],
+                               hashes=[digest(path) for path in originals])
+                p['renditions'] = [r for r in p['renditions'] if r['clip_id'] != c['id']]
+                p['renditions'].extend(r | dict(clip_id=c['id']) for r in renditions)
+                self.repo.save(db, p)
         self.phase(job, 'analyzing')
-        if not self.settings.simulation:
-            raise DomainError('CAPABILITY_UNVERIFIED', '模型尚未配置，已保留原片及任务', action='configure_model')
-        scenario = c.get('group', {}).get('scenario', 'unrelated')
-        candidates = [e for r in renditions for e in model.observe(p['shots'], c['id'], r, scenario)]
+        records = []
+        if self.settings.simulation:
+            scenario = c.get('group', {}).get('scenario', 'unrelated')
+            candidates = [e for r in renditions for e in model.observe(p['shots'], c['id'], r, scenario)]
+        else:
+            if not p.get('model_upload_consent', False):
+                raise DomainError('MODEL_UPLOAD_NOT_AUTHORIZED', '请先允许本项目向千问上传分析副本',
+                                  action='authorize_upload')
+            candidates = []
+            for rendition in renditions:
+                items, record = self.service.model.observe(p['shots'], c['id'], rendition)
+                candidates.extend(items)
+                records.append(record)
         evidence = model.validate_evidence(candidates, p['shots'], c['id'], renditions)
         with self.repo.transaction() as db:
             p, c = self.current_clip(db, job)
             c.update(state='analyzed', rendition_id=renditions[0]['id'],
-                     duration=sum(r['duration'] for r in renditions), error=None,
-                     hashes=[digest(path) for path in originals])
-            p['renditions'].extend(r | dict(clip_id=c['id']) for r in renditions)
+                     duration=sum(r['duration'] for r in renditions), error=None)
             p['evidence'] = [e for e in p['evidence'] if e['clip_id'] != c['id']] + evidence
             p['last_processed_at'] = time.time()
             self.repo.save(db, p)
-            self.complete(db, job, dict(clip_id=c['id'], model='simulator-v1', prompt_version='fixture-v1',
-                                        usage=None, visual_evaluation=False))
+            self.complete(db, job, dict(clip_id=c['id'],
+                model='simulator-v1' if self.settings.simulation else self.settings.model_name,
+                prompt_version='fixture-v1' if self.settings.simulation else self.service.model.prompt_version,
+                calls=records, visual_evaluation=not self.settings.simulation))
         shutil.rmtree(attempt_dir, ignore_errors=True)
 
     def complete(self, db, job, result):
@@ -129,31 +142,25 @@ class Worker:
             self.pipeline(job)
             return
         if kind == 'plan':
-            if not self.settings.simulation:
-                raise DomainError('CAPABILITY_UNVERIFIED', '尚未配置真实规划模型', action='configure_model')
             with self.repo.transaction() as db:
                 p = self.repo.project(db, job['project_id'])
                 if p['confirmed'] or p['plan_version'] != job['payload']['plan_version']:
                     raise DomainError('STALE_REVISION', '草稿已改变，旧规划结果不覆盖当前清单')
-                p['shots'] = model.plan(p['goal'])
-                p['plan_version'] += 1
-                self.repo.save(db, p)
-                self.complete(db, job, dict(plan_version=p['plan_version']))
+            if self.settings.simulation:
+                shots, record = model.plan(p['goal']), dict(model='simulator-v1')
+            else:
+                shots, record = self.service.model.plan(p['goal'], p['conditions'], p['target_seconds'])
+            with self.repo.transaction() as db:
+                current = self.repo.project(db, job['project_id'])
+                if (not self.owns(db, job) or current['confirmed']
+                        or current['plan_version'] != job['payload']['plan_version']):
+                    raise DomainError('STALE_REVISION', '规划输入已过期，结果未提交')
+                current['shots'] = shots
+                current['plan_version'] += 1
+                self.repo.save(db, current)
+                self.complete(db, job, dict(plan_version=current['plan_version'], **record))
             return
-        if kind == 'connect':
-            if job['payload']['profile_id'] != 'simulator' or not self.settings.simulation:
-                raise DomainError('CAPABILITY_UNVERIFIED', 'X5 自动同步协议尚未验证', action='configure_device')
-            self.service.camera.read()
-            result = dict(device_id='camera_demo')
-        elif kind == 'scan':
-            result = self.service.scan()
-        elif kind == 'resume':
-            self.service.reconcile(job['payload']['session_id'], resume=True)
-            result = dict(session_id=job['payload']['session_id'])
-        else:
-            raise DomainError('INVALID_INPUT', '未知任务类型', 422)
-        with self.repo.transaction() as db:
-            self.complete(db, job, result)
+        raise DomainError('INVALID_INPUT', '未知任务类型', 422)
 
     def fail(self, job, error):
         with self.repo.transaction() as db:

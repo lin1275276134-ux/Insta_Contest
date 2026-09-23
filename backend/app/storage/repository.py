@@ -17,7 +17,7 @@ def encode(value):
 class Repository:
     def __init__(self, root):
         self.root = root
-        for directory in ('originals', 'renditions', 'tmp', 'logs', 'simulator'):
+        for directory in ('imports', 'originals', 'renditions', 'tmp', 'logs', 'simulator'):
             (root / directory).mkdir(parents=True, exist_ok=True)
         self.path = root / 'app.sqlite'
         with self.transaction() as db:

@@ -1,0 +1,119 @@
+import json
+from pathlib import Path
+import pytest
+from backend.app.camera.x5 import X5Camera
+from backend.app.config import Settings
+from backend.app.schema import DomainError
+
+
+def camera(tmp_path):
+    return X5Camera(Settings(data_dir=tmp_path, camera_profile="x5", x5_stable_seconds=0))
+
+
+def entry(name, size=10):
+    return dict(_localFileUrl="/DCIM/Camera01/" + name, size=size)
+
+
+def test_short_pages_total_is_page_count(tmp_path, monkeypatch):
+    cam = camera(tmp_path)
+    offsets = []
+    rows = [entry(f"VID_20260922_155953_00_{n:03}.mp4") for n in range(4)]
+
+    def request(path, body=None):
+        start = body["parameters"]["startPosition"]
+        offsets.append(start)
+        return dict(state="done", results=dict(entries=rows[start : start + 2], totalEntries=2))
+
+    monkeypatch.setattr(cam, "request", request)
+    assert len(cam.catalog()) == 4
+    assert offsets == [0, 2, 4]
+
+
+def test_duplicate_page_and_external_path_fail(tmp_path, monkeypatch):
+    cam = camera(tmp_path)
+    monkeypatch.setattr(
+        cam,
+        "request",
+        lambda *args: dict(state="done", results=dict(entries=[entry("VID_20260922_155953_00_079.mp4")])),
+    )
+    with pytest.raises(DomainError):
+        cam.catalog()
+    monkeypatch.setattr(
+        cam, "request", lambda *args: dict(state="done", results=dict(entries=[entry("../private")]))
+    )
+    with pytest.raises(DomainError):
+        cam.catalog()
+
+
+def test_real_evidence_groups_preview_as_auxiliary_and_never_trusts_projection(tmp_path):
+    cam = camera(tmp_path)
+    source = Path("docs/evidence/2026-09-22/catalog-single-lens-after-002.json")
+    rows = [e for p in json.loads(source.read_text())["pages"] for e in p["response"]["results"]["entries"]]
+    groups = cam.groups(rows)
+    single = next(g for g in groups if g["name"].endswith("079.mp4"))
+    assert len(single["members"]) == 2
+    assert len(single["media_members"]) == 1
+    assert single["projection"] == "unknown"
+    assert single["closed"] is False
+    panorama = next(g for g in groups if g["name"].endswith("078.insv"))
+    assert panorama["projection"] == "panorama"
+
+
+def test_readiness_needs_separate_verified_policy(tmp_path):
+    cam = camera(tmp_path)
+    rows = [entry("VID_20260922_155953_00_079.mp4"), entry("LRV_20260922_155953_01_079.lrv")]
+    cam.groups(rows)
+    assert not cam.groups(rows)[0]["closed"]
+    cam.settings.x5_readiness_verified = True
+    cam.settings.x5_single_lens_confirmed = True
+    ready = cam.groups(rows)[0]
+    assert ready["closed"] and ready["projection"] == "rectilinear"
+    assert ready["id"] == cam.groups(rows)[0]["id"]
+    changed = cam.groups([rows[0] | {"size": 11}, rows[1]])[0]
+    assert not changed["closed"] and changed["revision"] != ready["revision"]
+
+
+def test_integer_float_size_from_firmware_is_normalized(tmp_path, monkeypatch):
+    cam = camera(tmp_path)
+    responses = iter(
+        [
+            dict(state="done", results=dict(entries=[entry("VID_20260922_155953_00_079.mp4", 7000000000.0)])),
+            dict(state="done", results=dict(entries=[])),
+        ]
+    )
+    monkeypatch.setattr(cam, "request", lambda *args: next(responses))
+    rows = cam.catalog()
+    assert rows[0]["size"] == 7000000000 and type(rows[0]["size"]) is int
+
+
+def test_scan_failure_does_not_turn_partial_catalog_into_snapshot(tmp_path, monkeypatch):
+    cam = camera(tmp_path)
+    monkeypatch.setattr(cam, "connect", lambda: None)
+    monkeypatch.setattr(cam, "request", lambda *args: {"state": {"_cardState": "pass"}})
+    answers = iter([[{"path": "/DCIM/Camera01/VID_20260922_155953_00_079.mp4", "size": 10}], []])
+    monkeypatch.setattr(cam, "catalog", lambda: next(answers))
+    with pytest.raises(DomainError) as error:
+        cam.scan()
+    assert error.value.code == "CATALOG_INCOMPLETE"
+    assert not cam.observed
+
+
+def test_download_rejects_byte_shortfall_and_remote_change(tmp_path, monkeypatch):
+    import io
+
+    cam = camera(tmp_path)
+    cam.settings.x5_readiness_verified = True
+    rows = [entry("VID_20260922_155953_00_079.mp4", 10), entry("LRV_20260922_155953_01_079.lrv", 10)]
+    cam.groups(rows)
+    group = cam.groups(rows)[0]
+    monkeypatch.setattr(cam, "scan", lambda: [group])
+    monkeypatch.setattr(cam.opener, "open", lambda *args, **kwargs: io.BytesIO(b"short"))
+    with pytest.raises(DomainError) as error:
+        cam.download(group, tmp_path / "attempt")
+    assert error.value.code == "DOWNLOAD_INCOMPLETE"
+    monkeypatch.setattr(cam.opener, "open", lambda *args, **kwargs: io.BytesIO(b"0123456789"))
+    calls = iter([[group], [dict(group, revision="changed")]])
+    monkeypatch.setattr(cam, "scan", lambda: next(calls))
+    with pytest.raises(DomainError) as error:
+        cam.download(group, tmp_path / "attempt2")
+    assert error.value.code == "DOWNLOAD_INCOMPLETE"

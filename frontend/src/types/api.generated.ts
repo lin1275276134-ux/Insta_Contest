@@ -90,6 +90,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{pid}/analysis:authorize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Authorize Analysis */
+        post: operations["authorize_analysis_api_v1_projects__pid__analysis_authorize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{pid}/snapshot": {
         parameters: {
             query?: never;
@@ -101,125 +118,6 @@ export interface paths {
         get: operations["snapshot_api_v1_projects__pid__snapshot_get"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/devices:connect": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Connect */
-        post: operations["connect_api_v1_devices_connect_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/devices/{did}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Device */
-        get: operations["device_api_v1_devices__did__get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/devices/{did}/scans": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Scan */
-        post: operations["scan_api_v1_devices__did__scans_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/devices/{did}/catalog": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Catalog */
-        get: operations["catalog_api_v1_devices__did__catalog_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/projects/{pid}/sync-sessions": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Start Sync */
-        post: operations["start_sync_api_v1_projects__pid__sync_sessions_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/sync-sessions/{sid}/scope:confirm": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Scope */
-        post: operations["scope_api_v1_sync_sessions__sid__scope_confirm_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/sync-sessions/{sid}/{action}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Session Action */
-        post: operations["session_action_api_v1_sync_sessions__sid___action__post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -358,29 +256,8 @@ export interface components {
              * @default unknown
              */
             projection: string;
-            /** File */
-            file: string;
-        };
-        /** Catalog */
-        Catalog: {
-            /** Id */
-            id: string;
-            /**
-             * Device Id
-             * @default camera_demo
-             */
-            device_id: string;
-            /**
-             * Complete
-             * @default true
-             */
-            complete: boolean;
-            /** Completed At */
-            completed_at: number;
-            /** Groups */
-            groups: components["schemas"]["Group"][];
-            /** Next Cursor */
-            next_cursor?: string | null;
+            /** Files */
+            files: string[];
         };
         /** Clip */
         Clip: {
@@ -412,6 +289,16 @@ export interface components {
             error?: components["schemas"]["ErrorDetail"] | null;
             /** Job Id */
             job_id?: string | null;
+            /**
+             * Source
+             * @default local
+             * @constant
+             */
+            source: "local";
+            /** Size */
+            size?: number | null;
+            /** Sha256 */
+            sha256?: string | null;
         };
         /** ClipPage */
         ClipPage: {
@@ -420,27 +307,13 @@ export interface components {
             /** Next Cursor */
             next_cursor?: string | null;
         };
-        /** ConfirmScope */
-        ConfirmScope: {
-            /** Expected Revision */
-            expected_revision: number;
-            /** Snapshot Id */
-            snapshot_id: string;
-            /** Include Group Ids */
-            include_group_ids: string[];
-            /** Exclude Group Ids */
-            exclude_group_ids: string[];
-        };
-        /** Connect */
-        Connect: {
-            /**
-             * Profile Id
-             * @enum {string}
-             */
-            profile_id: "simulator" | "x5";
-        };
         /** CreateProject */
         CreateProject: {
+            /**
+             * Model Upload Consent
+             * @default false
+             */
+            model_upload_consent: boolean;
             /** Goal */
             goal: string;
             /**
@@ -471,28 +344,11 @@ export interface components {
              */
             continuous: boolean;
         };
-        /** Device */
-        Device: {
-            /** Id */
-            id: string;
-            /** Connection State */
-            connection_state: string;
-            /** Mode */
-            mode: string;
-            /** Firmware */
-            firmware: string;
-            /** Capabilities */
-            capabilities: {
-                [key: string]: "supported" | "unsupported" | "unknown";
-            };
-            /** Evidence */
-            evidence: string;
-        };
         /**
          * ErrorCode
          * @enum {string}
          */
-        ErrorCode: "DEVICE_DISCONNECTED" | "CAPABILITY_UNVERIFIED" | "CATALOG_INCOMPLETE" | "SCOPE_STALE" | "GROUP_NOT_READY" | "DOWNLOAD_INCOMPLETE" | "MEDIA_UNSUPPORTED" | "STORAGE_FULL" | "NETWORK_UNAVAILABLE" | "MODEL_TIMEOUT" | "MODEL_OUTPUT_INVALID" | "STALE_REVISION" | "CONFLICT" | "NOT_FOUND" | "INVALID_INPUT";
+        ErrorCode: "DEVICE_DISCONNECTED" | "CAPABILITY_UNVERIFIED" | "CATALOG_INCOMPLETE" | "SCOPE_STALE" | "GROUP_NOT_READY" | "DOWNLOAD_INCOMPLETE" | "MEDIA_UNSUPPORTED" | "STORAGE_FULL" | "NETWORK_UNAVAILABLE" | "MODEL_TIMEOUT" | "MODEL_UPLOAD_NOT_AUTHORIZED" | "MODEL_OUTPUT_INVALID" | "STALE_REVISION" | "CONFLICT" | "NOT_FOUND" | "INVALID_INPUT";
         /** ErrorDetail */
         ErrorDetail: {
             code: components["schemas"]["ErrorCode"];
@@ -540,58 +396,38 @@ export interface components {
              */
             continuous: boolean;
         };
-        /** Group */
-        Group: {
-            /** Id */
-            id: string;
-            /** Revision */
-            revision: string;
-            /** Name */
-            name: string;
-            /**
-             * Storage Epoch
-             * @default card_demo
-             */
-            storage_epoch: string;
-            /** Members */
-            members: string[];
-            /** Sizes */
-            sizes: number[];
-            /**
-             * Closed
-             * @default false
-             */
-            closed: boolean;
-            /**
-             * Complete
-             * @default false
-             */
-            complete: boolean;
-            /**
-             * Projection
-             * @default unknown
-             * @enum {string}
-             */
-            projection: "rectilinear" | "unknown" | "panorama";
-            /**
-             * Scenario
-             * @default unrelated
-             * @enum {string}
-             */
-            scenario: "materials" | "result" | "occluded" | "clear" | "unrelated" | "uncertain";
-        };
         /** Health */
         Health: {
             /** Status */
             status: string;
-            /** Camera Mode */
-            camera_mode: string;
             /** Model Mode */
             model_mode: string;
             /** Worker */
             worker: string;
             /** Database */
             database: string;
+        };
+        /** ImportBatch */
+        ImportBatch: {
+            /** Revision */
+            revision: number;
+            /** Items */
+            items: components["schemas"]["ImportItem"][];
+        };
+        /** ImportItem */
+        ImportItem: {
+            /** Filename */
+            filename: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "accepted" | "duplicate" | "failed";
+            /** Clip Id */
+            clip_id?: string | null;
+            /** Job Id */
+            job_id?: string | null;
+            error?: components["schemas"]["ErrorDetail"] | null;
         };
         /** Job */
         Job: {
@@ -651,6 +487,11 @@ export interface components {
         };
         /** Project */
         Project: {
+            /**
+             * Model Upload Consent
+             * @default false
+             */
+            model_upload_consent: boolean;
             /** Id */
             id: string;
             /** Goal */
@@ -686,41 +527,6 @@ export interface components {
         Revision: {
             /** Expected Revision */
             expected_revision: number;
-        };
-        /** Scope */
-        Scope: {
-            /** Expected Revision */
-            expected_revision: number;
-            /** Device Id */
-            device_id: string;
-            /** Snapshot Id */
-            snapshot_id: string;
-            /** Selected Group Ids */
-            selected_group_ids: string[];
-        };
-        /** Session */
-        Session: {
-            /** Id */
-            id: string;
-            /** Project Id */
-            project_id: string;
-            /** Device Id */
-            device_id: string;
-            /**
-             * State
-             * @enum {string}
-             */
-            state: "watching" | "awaiting_scope" | "paused" | "disconnected" | "error" | "closed";
-            /** Snapshot Id */
-            snapshot_id: string;
-            /** Last Complete Scan At */
-            last_complete_scan_at?: number | null;
-            /** Membership */
-            membership: {
-                [key: string]: "included" | "excluded" | "pending_confirmation";
-            };
-            /** Storage Epoch */
-            storage_epoch?: string | null;
         };
         /** Shot */
         Shot: {
@@ -769,18 +575,10 @@ export interface components {
             /** Plan Version */
             plan_version: number;
             /**
-             * Camera Mode
-             * @enum {string}
-             */
-            camera_mode: "simulator" | "unconfigured";
-            /**
              * Model Mode
              * @enum {string}
              */
-            model_mode: "simulator" | "unconfigured";
-            sync: components["schemas"]["Session"] | null;
-            /** Pending Scope Count */
-            pending_scope_count: number;
+            model_mode: "simulator" | "qwen" | "unconfigured";
             /** Pipeline */
             pipeline: {
                 [key: string]: number;
@@ -797,11 +595,9 @@ export interface components {
              * Readiness
              * @enum {string}
              */
-            readiness: "not_ready" | "checking" | "unverified" | "ready";
+            readiness: "not_ready" | "checking" | "ready";
             /** Checked At */
             checked_at: number | null;
-            /** Verified Snapshot Id */
-            verified_snapshot_id: string | null;
             next_action: components["schemas"]["NextAction"] | null;
             /** Jobs */
             jobs: components["schemas"]["Job"][];
@@ -1076,6 +872,52 @@ export interface operations {
             };
         };
     };
+    authorize_analysis_api_v1_projects__pid__analysis_authorize_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "idempotency-key"?: string | null;
+            };
+            path: {
+                pid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Revision"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     snapshot_api_v1_projects__pid__snapshot_get: {
         parameters: {
             query?: never;
@@ -1094,315 +936,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Snapshot"];
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    connect_api_v1_devices_connect_post: {
-        parameters: {
-            query?: never;
-            header?: {
-                "idempotency-key"?: string | null;
-            };
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Connect"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Job"];
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    device_api_v1_devices__did__get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                did: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Device"];
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    scan_api_v1_devices__did__scans_post: {
-        parameters: {
-            query?: never;
-            header?: {
-                "idempotency-key"?: string | null;
-            };
-            path: {
-                did: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            202: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Job"];
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    catalog_api_v1_devices__did__catalog_get: {
-        parameters: {
-            query: {
-                snapshot_id: string;
-                cursor?: string | null;
-                limit?: number;
-            };
-            header?: never;
-            path: {
-                did: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Catalog"];
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    start_sync_api_v1_projects__pid__sync_sessions_post: {
-        parameters: {
-            query?: never;
-            header?: {
-                "idempotency-key"?: string | null;
-            };
-            path: {
-                pid: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Scope"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    scope_api_v1_sync_sessions__sid__scope_confirm_post: {
-        parameters: {
-            query?: never;
-            header?: {
-                "idempotency-key"?: string | null;
-            };
-            path: {
-                sid: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ConfirmScope"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Conflict */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Unprocessable Content */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    session_action_api_v1_sync_sessions__sid___action__post: {
-        parameters: {
-            query?: never;
-            header?: {
-                "idempotency-key"?: string | null;
-            };
-            path: {
-                sid: string;
-                action: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Revision"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
                 };
             };
             /** @description Conflict */
@@ -1704,7 +1237,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Job"];
+                    "application/json": components["schemas"]["ImportBatch"];
                 };
             };
             /** @description Conflict */

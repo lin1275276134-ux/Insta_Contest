@@ -3,7 +3,6 @@ export type Snapshot = components['schemas']['Snapshot'];
 export type Project = components['schemas']['Project'];
 export type Shot = components['schemas']['Shot'];
 export type Job = components['schemas']['Job'];
-export type Catalog = components['schemas']['Catalog'];
 export type Evidence = components['schemas']['Evidence'];
 export const prefix = '/api/v1';
 export class ApiError extends Error {

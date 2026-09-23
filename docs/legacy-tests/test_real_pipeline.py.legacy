@@ -1,0 +1,60 @@
+from pathlib import Path
+from conftest import start, snapshot
+from backend.app.schema import DomainError
+
+
+def test_model_failure_preserves_playable_rendition_without_evidence(client, app, setup_project, seed, monkeypatch):
+    pid = setup_project
+    start(client, app, pid, [seed[0]['id']])
+    # Retain the local camera transport but make observation follow the real-model branch.
+    with app.state.service.repo.transaction() as db:
+        project = app.state.service.repo.project(db, pid)
+        project['model_upload_consent'] = True
+        app.state.service.repo.save(db, project)
+    app.state.service.settings.simulation = False
+    monkeypatch.setattr(app.state.service.camera, 'download', lambda group, target:
+                        [app.state.service.camera.root / group['members'][0]])
+    def fail(*args):
+        raise DomainError('MODEL_TIMEOUT', 'timeout', retryable=True)
+    monkeypatch.setattr(app.state.service.model, 'observe', fail)
+    app.state.worker.step()
+    snap = snapshot(client, pid)
+    clip = snap['clips'][0]
+    assert clip['error']['code'] == 'MODEL_TIMEOUT'
+    assert clip['rendition_id'] and not snap['evidence']
+    assert client.get('/api/v1/renditions/'+clip['rendition_id']+'/content').status_code == 200
+    # Model retry must succeed from the cached video even when the camera is now offline.
+    def offline(*args):
+        raise AssertionError('must not redownload on model retry')
+    monkeypatch.setattr(app.state.service.camera, 'download', offline)
+    monkeypatch.setattr(app.state.service.model, 'observe', lambda *args: ([], {'model': 'fake-transport-test'}))
+    with app.state.service.repo.transaction() as db:
+        db.execute('UPDATE jobs SET next_attempt_at=0 WHERE id=?', (clip['job_id'],))
+    app.state.worker.step()
+    after = snapshot(client, pid)
+    assert after['clips'][0]['state'] == 'analyzed'
+    assert after['clips'][0]['rendition_id'] == clip['rendition_id']
+
+
+def test_preview_is_retained_but_not_added_to_video_duration(client, app, setup_project, seed, monkeypatch):
+    pid = setup_project
+    start(client, app, pid, [seed[0]['id']])
+    repo = app.state.service.repo
+    root = app.state.service.camera.root
+    source = root / seed[0]['members'][0]
+    with repo.transaction() as db:
+        project = repo.project(db, pid)
+        group = project['clips'][0]['group']
+        group['members'] = ['primary', 'preview']
+        group['sizes'] = [source.stat().st_size]*2
+        group['media_members'] = ['primary']
+        repo.save(db, project)
+    monkeypatch.setattr(app.state.service.camera, 'download', lambda *args: [source, source])
+    app.state.worker.step()
+    snap = snapshot(client, pid)
+    assert snap['clips'][0]['state'] == 'analyzed'
+    originals = list((app.state.service.settings.data_dir / 'originals' / snap['clips'][0]['id']).glob('*.media'))
+    assert len(originals) == 2
+    with repo.transaction() as db:
+        renditions = repo.project(db, pid)['renditions']
+    assert len(renditions) == 1 and Path(renditions[0]['path']).exists()

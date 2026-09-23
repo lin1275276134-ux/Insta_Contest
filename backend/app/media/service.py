@@ -34,12 +34,19 @@ def prepare(paths: list[Path], projection, target: Path, settings):
         duration = float(raw.get('format', {}).get('duration', 0))
         if not streams or not math.isfinite(duration) or duration <= 0:
             raise DomainError('MEDIA_UNSUPPORTED', '视频时长或画面轨无效')
+        if duration < 2:
+            raise DomainError('MEDIA_UNSUPPORTED', '视频短于模型支持的 2 秒下限')
         # Decode the entire source first: an openable container is not proof of completeness.
         command(['ffmpeg', '-v', 'error', '-xerror', '-i', str(source), '-map', '0:v:0',
                  '-f', 'null', '-'], settings.media_timeout)
         start = 0.0
         while start < duration - 0.001:
             length = min(settings.segment_seconds, duration - start)
+            # Qwen VL requires every video input to be at least two seconds. Avoid
+            # producing a tiny tail by folding it into the preceding segment.
+            remaining = duration - start - length
+            if 0 < remaining < 2:
+                length += remaining
             rid = uid('rendition')
             output = target / f'{rid}.mp4'
             command(['ffmpeg', '-v', 'error', '-xerror', '-y', '-ss', str(start), '-i', str(source),
@@ -58,3 +65,14 @@ def prepare(paths: list[Path], projection, target: Path, settings):
             start += length
         offset += duration
     return renditions
+
+
+def validate_x5_single_lens(paths):
+    """A configured single-lens profile must still match the verified media layout."""
+    for path in paths:
+        raw = json.loads(command(['ffprobe', '-v', 'error', '-show_streams', '-of', 'json', str(path)], 30))
+        videos = [s for s in raw.get('streams', []) if s.get('codec_type') == 'video']
+        if (len(videos) != 1 or (videos[0].get('width'), videos[0].get('height')) != (1920, 1080)
+                or videos[0].get('codec_name') not in ('hevc', 'h264')):
+            raise DomainError('MEDIA_UNSUPPORTED', '当前仅验证单镜头普通录像 1080p；请检查相机模式',
+                              action='check_format')

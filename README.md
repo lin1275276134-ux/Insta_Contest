@@ -1,11 +1,9 @@
 # 拍够了吗？
 
-本地拍摄覆盖检查工具：连接相机 → 发现素材 → 分析 → 判断教程分镜「还缺什么」→ 给出补拍建议。
+目标驱动的本地素材覆盖检查工具：说明想拍出的成片 → 选择本地视频 → 检查必拍内容「还缺什么」→ 给出补拍建议。
 
-> **当前状态：模拟流程已验收；X5 真机探测部分通过，尚未完成产品交付。**
-> 已验证视频分页读取、两段按钮录制后新增发现和下载；单镜头 079 样本可自动生成分析副本。
-> 真实相机尚未接入产品，真实模型未配置。接手请先读 [交接说明](docs/交接说明.md)，
-> 实测限制与证据见 [设备探测记录](docs/device-probe.md)。
+> **当前产品只分析用户主动选择的本地普通视角视频。**
+> X5 目录探测资料仅作为历史证据保留，不再属于正式运行流程。
 
 ## 环境要求
 
@@ -25,33 +23,40 @@ scripts/setup
 ## 运行
 
 ```bash
-scripts/start --simulate   # 正式本地启动（模拟模式），随后打开 http://127.0.0.1:8765
+scripts/start --simulate   # 本地启动（模拟模型），随后打开 http://127.0.0.1:8765
 scripts/stop               # 优雅停止；项目、任务与媒体全部保留
 scripts/dev --simulate     # 开发模式，带 Vite 热更新
+scripts/check-model        # 不上传视频，验证 Qwen VL 密钥、地域、模型权限和结构化输出
 ```
 
-`--simulate` 必须显式给出。不给出时，涉及真实设备与真实模型的接口会返回
-`CAPABILITY_UNVERIFIED`，而不是假装成功。
+`--simulate` 必须显式给出。不给出时需要配置真实模型；未配置或未授权时会返回明确错误，
+不会把模拟结果当作真实视觉结论。
+
+真实模型配置：复制 `.env.example` 为 `.env`，填写本机的 `DASHSCOPE_API_KEY`，然后执行
+`scripts/check-model`。默认使用北京地域的 `qwen3-vl-flash`；密钥与端点必须属于同一地域。
+分析副本会在用户逐项目授权后上传，原片留在本机。单段分析副本限制为 7 MiB，确保 Base64
+编码后低于服务端 10 MB 限制；过大的副本会明确失败并提示调整分段参数。
 
 数据默认写入 `./data/`（可用 `BOLD_DATA_DIR` 覆盖）。`data/` 已被 git 忽略。
 
 ## 使用流程
 
-1. 创建项目，填写教程主题、目标成片时长与拍摄条件 → 生成分镜草稿。
+1. 创建项目，填写成片目标、目标成片时长与拍摄条件 → 生成分镜草稿。成片可以是教程、探店、Vlog、开箱、产品展示或其他短视频，不需要预先选择固定类型。
 2. 修改并**确认锁定**分镜清单（每个分镜有可观察的通过标准）。
-3. 「连接并浏览素材」→ 勾选本项目已有片段，或只接收之后的新片段。
-4. 在相机上录制。软件轮询目录、发现新素材、下载、转码、分析、更新分镜覆盖。
+3. 确认视频为普通视角后，一次选择一个或多个本地视频。
+4. 软件逐文件校验、生成分析副本、调用模型并更新分镜覆盖；之后可继续追加视频。
 5. 页面三栏：分镜进度 / 素材与证据 / 当前建议。点击证据在**同一份分析副本**上定位播放。
-6. 覆盖齐全且扫描新鲜时显示「已拍够」；暂停、断连或有未完成处理时保留进度但降级为
-   「覆盖齐全 · 最新素材未核验」。
+6. 全部纳入视频分析完成且必要标准覆盖齐全时显示「分镜覆盖完整」；处理中或失败时显示
+   「正在分析」及对应恢复入口。
 
 ## 测试
 
 | 命令 | 范围 | 依赖 |
 |---|---|---|
 | `scripts/check` | ruff、单元测试、契约与类型重导出、前端单测、构建 | 无 |
-| `scripts/test-integration` | 临时库 + 假相机的服务集成测试（SY/ME/AI/RU/API 语义） | 无 |
+| `scripts/test-integration` | 临时库 + 本地视频的导入、媒体、任务与恢复测试 | FFmpeg |
 | `scripts/test-e2e` | 浏览器端完整操作验收（UI01–UI06 / E01–E05） | 一个 Chromium 系浏览器 |
+| `scripts/test-e2e-real` | Qwen VL + 实拍视频完整链路（需 `BOLD_E2E_VIDEO_FILES`） | 浏览器、密钥、网络、实拍视频 |
 | `scripts/test-live` | 真机 / 真实模型 | **当前不可用，见下** |
 
 `scripts/test-e2e` 优先使用 Playwright 自带的 Chromium，找不到时回退到系统
@@ -69,12 +74,12 @@ BROWSER_EXECUTABLE='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome
 ## 目录结构
 
 ```text
-backend/app/      schema、service（事务/规则聚合）、storage、jobs、camera、media、analysis、coverage、api
+backend/app/      schema、service（事务/规则聚合）、storage、jobs、media、analysis、coverage、api
 contracts/        OpenAPI 与 JSON Schema（由 scripts/export-contracts.py 生成）
 frontend/         React + TS + Vite 页面；src/ 为源码，e2e/ 为浏览器验收
 scripts/          统一入口（setup/check/test-*/dev/start/stop）
-tests/            unit（纯规则）与 integration（临时库 + 假相机）
-tools/simulator.py 固定标注的模拟素材目录工具
+tests/            unit（纯规则）与 integration（临时库 + 本地视频）
+tools/simulator.py 固定标注的模拟素材生成工具
 docs/             设计、测试与验收、交接说明
 ```
 
@@ -85,7 +90,7 @@ docs/             设计、测试与验收、交接说明
 - [开发测试与验收流程](docs/开发测试与验收流程.md) — 测试分层与用例矩阵（SY/ME/AI/RU/UI/E/HW）
 - [交接说明](docs/交接说明.md) — **接手请先读这份**：已完成/已验证/未验证/下一步
 
-## 真机探测准备
+## 历史真机资料
 
-未连接设备时可先准备真实原片。只读设备信息与媒体报告采集命令见
-[设备探测记录](docs/device-probe.md)。采集成功不代表 G0/G1 或真机验收通过。
+早期 X5 只读探测记录见 [设备探测记录](docs/device-probe.md)。这些脚本和证据不参与正式产品启动、
+完成判断或交付验收。

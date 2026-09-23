@@ -89,6 +89,38 @@
           ],
           "default": null,
           "title": "Job Id"
+        },
+        "source": {
+          "const": "local",
+          "default": "local",
+          "title": "Source",
+          "type": "string"
+        },
+        "size": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Size"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
         }
       },
       "required": [
@@ -144,6 +176,7 @@
         "STORAGE_FULL",
         "NETWORK_UNAVAILABLE",
         "MODEL_TIMEOUT",
+        "MODEL_UPLOAD_NOT_AUTHORIZED",
         "MODEL_OUTPUT_INVALID",
         "STALE_REVISION",
         "CONFLICT",
@@ -380,6 +413,11 @@
     "Project": {
       "additionalProperties": false,
       "properties": {
+        "model_upload_consent": {
+          "default": false,
+          "title": "Model Upload Consent",
+          "type": "boolean"
+        },
         "id": {
           "pattern": "^[a-zA-Z0-9_-]{1,100}$",
           "title": "Id",
@@ -433,90 +471,6 @@
         "created_at"
       ],
       "title": "Project",
-      "type": "object"
-    },
-    "Session": {
-      "additionalProperties": false,
-      "properties": {
-        "id": {
-          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-          "title": "Id",
-          "type": "string"
-        },
-        "project_id": {
-          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-          "title": "Project Id",
-          "type": "string"
-        },
-        "device_id": {
-          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-          "title": "Device Id",
-          "type": "string"
-        },
-        "state": {
-          "enum": [
-            "watching",
-            "awaiting_scope",
-            "paused",
-            "disconnected",
-            "error",
-            "closed"
-          ],
-          "title": "State",
-          "type": "string"
-        },
-        "snapshot_id": {
-          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-          "title": "Snapshot Id",
-          "type": "string"
-        },
-        "last_complete_scan_at": {
-          "anyOf": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Last Complete Scan At"
-        },
-        "membership": {
-          "additionalProperties": {
-            "enum": [
-              "included",
-              "excluded",
-              "pending_confirmation"
-            ],
-            "type": "string"
-          },
-          "title": "Membership",
-          "type": "object"
-        },
-        "storage_epoch": {
-          "anyOf": [
-            {
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Storage Epoch"
-        }
-      },
-      "required": [
-        "id",
-        "project_id",
-        "device_id",
-        "state",
-        "snapshot_id",
-        "membership"
-      ],
-      "title": "Session",
       "type": "object"
     },
     "Shot": {
@@ -633,35 +587,14 @@
       "title": "Plan Version",
       "type": "integer"
     },
-    "camera_mode": {
-      "enum": [
-        "simulator",
-        "unconfigured"
-      ],
-      "title": "Camera Mode",
-      "type": "string"
-    },
     "model_mode": {
       "enum": [
         "simulator",
+        "qwen",
         "unconfigured"
       ],
       "title": "Model Mode",
       "type": "string"
-    },
-    "sync": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/Session"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "pending_scope_count": {
-      "title": "Pending Scope Count",
-      "type": "integer"
     },
     "pipeline": {
       "additionalProperties": {
@@ -699,7 +632,6 @@
       "enum": [
         "not_ready",
         "checking",
-        "unverified",
         "ready"
       ],
       "title": "Readiness",
@@ -715,18 +647,6 @@
         }
       ],
       "title": "Checked At"
-    },
-    "verified_snapshot_id": {
-      "anyOf": [
-        {
-          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "title": "Verified Snapshot Id"
     },
     "next_action": {
       "anyOf": [
@@ -751,10 +671,7 @@
     "project_id",
     "revision",
     "plan_version",
-    "camera_mode",
     "model_mode",
-    "sync",
-    "pending_scope_count",
     "pipeline",
     "clips",
     "evidence",
@@ -762,7 +679,6 @@
     "coverage_complete",
     "readiness",
     "checked_at",
-    "verified_snapshot_id",
     "next_action",
     "jobs"
   ],

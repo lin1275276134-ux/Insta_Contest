@@ -6,9 +6,9 @@ def plan(goal):
     return [Shot(id=uid('shot'), title=title, critical=i == 1, criteria=[
         Criterion(id=uid('criterion'), description=description, continuous=i == 1)
     ]).model_dump() for i, (title, description) in enumerate([
-        ('准备材料与工具', f'清晰展示「{goal[:80]}」所需材料与工具'),
-        ('展示关键操作', '连续展示完整操作过程，关键连接或操作位置无遮挡'),
-        ('展示完成效果', '清晰展示完成后的结果及可见检查')])]
+        ('建立主题', f'用清晰可见的画面建立「{goal[:80]}」的主题、对象或场景'),
+        ('呈现核心内容', '连续清晰地呈现成片目标中最关键的过程、特点或体验，主体无遮挡'),
+        ('结果与收束', '用清晰可见的画面呈现结果、代表性细节或完整收束')])]
 
 
 def observe(shots, clip_id, rendition, scenario):

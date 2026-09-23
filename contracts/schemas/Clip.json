@@ -71,7 +71,40 @@
       "title": "Id",
       "type": "string"
     },
-    "project_id": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "group_key": {
+      "title": "Group Key",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "awaiting_ready",
+        "downloading",
+        "preparing",
+        "analyzing",
+        "analyzed",
+        "failed",
+        "blocked_format",
+        "excluded",
+        "queued"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "active": {
+      "default": true,
+      "title": "Active",
+      "type": "boolean"
+    },
+    "generation": {
+      "default": 1,
+      "title": "Generation",
+      "type": "integer"
+    },
+    "rendition_id": {
       "anyOf": [
         {
           "pattern": "^[a-zA-Z0-9_-]{1,100}$",
@@ -81,27 +114,20 @@
           "type": "null"
         }
       ],
-      "title": "Project Id"
+      "default": null,
+      "title": "Rendition Id"
     },
-    "kind": {
-      "title": "Kind",
-      "type": "string"
-    },
-    "state": {
-      "enum": [
-        "queued",
-        "running",
-        "retry_wait",
-        "succeeded",
-        "failed",
-        "cancelled"
+    "duration": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
       ],
-      "title": "State",
-      "type": "string"
-    },
-    "attempt": {
-      "title": "Attempt",
-      "type": "integer"
+      "default": null,
+      "title": "Duration"
     },
     "error": {
       "anyOf": [
@@ -114,27 +140,58 @@
       ],
       "default": null
     },
-    "result": {
+    "job_id": {
       "anyOf": [
         {
-          "additionalProperties": true,
-          "type": "object"
+          "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+          "type": "string"
         },
         {
           "type": "null"
         }
       ],
       "default": null,
-      "title": "Result"
+      "title": "Job Id"
+    },
+    "source": {
+      "const": "local",
+      "default": "local",
+      "title": "Source",
+      "type": "string"
+    },
+    "size": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Size"
+    },
+    "sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Sha256"
     }
   },
   "required": [
     "id",
-    "project_id",
-    "kind",
-    "state",
-    "attempt"
+    "name",
+    "group_key",
+    "state"
   ],
-  "title": "Job",
+  "title": "Clip",
   "type": "object"
 }

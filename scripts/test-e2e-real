@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/_common"
+if [[ -z "${BOLD_E2E_VIDEO_FILES:-}" ]]; then
+  echo '请设置 BOLD_E2E_VIDEO_FILES，多个绝对路径用冒号分隔。' >&2
+  exit 2
+fi
+export BOLD_SIMULATION=0
+export BOLD_DATA_DIR="$(mktemp -d /private/tmp/bold-maker-real-e2e.XXXXXX)"
+trap 'rm -rf "$BOLD_DATA_DIR"' EXIT
+scripts/check-model
+npm --prefix frontend run build
+(cd frontend && npm run test:e2e -- --grep 'real Qwen video E2E')

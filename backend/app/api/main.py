@@ -87,8 +87,7 @@ def create_app(settings=None, run_worker=True):
     def health():
         with repo.transaction() as db:
             db.execute('SELECT 1')
-        mode = 'simulator' if settings.simulation else 'unconfigured'
-        return dict(status='ok', camera_mode=mode, model_mode=mode, database='ok',
+        return dict(status='ok', model_mode=service.model_mode, database='ok',
                     worker='running' if worker.thread and worker.thread.is_alive() else 'stopped')
 
     @app.post(PREFIX + '/projects', response_model=S.Project, status_code=201)
@@ -117,63 +116,22 @@ def create_app(settings=None, run_worker=True):
         return mutate(request, body.model_dump(), idempotency_key,
                       lambda db: service.confirm_plan(db, pid, body.expected_revision))
 
+    @app.post(PREFIX + '/projects/{pid}/analysis:authorize', response_model=S.Project)
+    def authorize_analysis(pid: S.ID, body: S.Revision, request: Request, idempotency_key: str | None = Header(None)):
+        def action(db):
+            p = repo.project(db, pid)
+            repo.expect(p, body.expected_revision)
+            p['model_upload_consent'] = True
+            repo.save(db, p)
+            return public_project(p)
+        return mutate(request, body.model_dump(), idempotency_key, action)
+
     @app.get(PREFIX + '/projects/{pid}/snapshot', response_model=S.Snapshot)
     def snapshot(pid: S.ID):
         data = service.snapshot(pid)
         data['clips'] = [S.Clip.model_validate({k: v for k, v in c.items() if k in S.Clip.model_fields})
                          for c in data['clips']]
         return data
-
-    @app.post(PREFIX + '/devices:connect', response_model=S.Job, status_code=202)
-    def connect(body: S.Connect, request: Request, idempotency_key: str | None = Header(None)):
-        def action(db):
-            jid = repo.enqueue(db, 'connect', body.model_dump(), idempotency_key or uid('connect'))
-            return repo.job(db, jid)
-        return mutate(request, body.model_dump(), idempotency_key, action)
-
-    @app.get(PREFIX + '/devices/{did}', response_model=S.Device)
-    def device(did: S.ID):
-        if did not in ('camera_demo', 'camera_x5'):
-            raise S.DomainError('NOT_FOUND', '设备未配置', 404)
-        return service.device('simulator' if did == 'camera_demo' else 'x5')
-
-    @app.post(PREFIX + '/devices/{did}/scans', response_model=S.Job, status_code=202)
-    def scan(did: S.ID, request: Request, idempotency_key: str | None = Header(None)):
-        if did != 'camera_demo' or not settings.simulation:
-            raise S.DomainError('CAPABILITY_UNVERIFIED', '真实目录协议尚未验证', action='configure_device')
-        def action(db):
-            jid = repo.enqueue(db, 'scan', {}, idempotency_key or uid('scan'))
-            return repo.job(db, jid)
-        return mutate(request, {}, idempotency_key, action)
-
-    @app.get(PREFIX + '/devices/{did}/catalog', response_model=S.Catalog)
-    def catalog(did: S.ID, snapshot_id: S.ID, cursor: str | None = None, limit: int = Query(100, ge=1, le=100)):
-        with repo.transaction() as db:
-            result = service.catalog(db, snapshot_id)
-            if result['device_id'] != did:
-                raise S.DomainError('NOT_FOUND', '设备与快照不匹配', 404)
-            result['groups'], result['next_cursor'] = paginate(result['groups'], cursor, limit, 'id')
-            return result
-
-    @app.post(PREFIX + '/projects/{pid}/sync-sessions', status_code=201)
-    def start_sync(pid: S.ID, body: S.Scope, request: Request, idempotency_key: str | None = Header(None)):
-        # Simulator scan is bounded local I/O. A real adapter must queue the confirmation rescan.
-        groups = service.camera.scan()
-        return mutate(request, body.model_dump(), idempotency_key,
-                      lambda db: service.start_session(db, pid, body.model_dump(), groups))
-
-    @app.post(PREFIX + '/sync-sessions/{sid}/scope:confirm')
-    def scope(sid: S.ID, body: S.ConfirmScope, request: Request, idempotency_key: str | None = Header(None)):
-        return mutate(request, body.model_dump(), idempotency_key,
-                      lambda db: service.confirm_scope(db, sid, body.model_dump()))
-
-    @app.post(PREFIX + '/sync-sessions/{sid}/{action}')
-    def session_action(sid: S.ID, action: str, body: S.Revision, request: Request,
-                       idempotency_key: str | None = Header(None)):
-        if action not in ('pause', 'resume', 'close'):
-            raise S.DomainError('NOT_FOUND', '未知会话操作', 404)
-        return mutate(request, body.model_dump(), idempotency_key,
-                      lambda db: service.session_action(db, sid, body.expected_revision, action))
 
     @app.get(PREFIX + '/projects/{pid}/clips', response_model=S.ClipPage)
     def clips(pid: S.ID, cursor: str | None = None, limit: int = Query(30, ge=1, le=100)):
@@ -219,54 +177,71 @@ def create_app(settings=None, run_worker=True):
             raise S.DomainError('NOT_FOUND', '本地分析副本不存在', 404)
         return FileResponse(rendition['path'], media_type='video/mp4')
 
-    @app.post(PREFIX + '/projects/{pid}/imports', response_model=S.Job, status_code=202)
+    @app.post(PREFIX + '/projects/{pid}/imports', response_model=S.ImportBatch, status_code=202)
     def upload(pid: S.ID, request: Request, expected_revision: int = Form(...),
-               projection: str = Form('unknown'), file: UploadFile = File(...),
+               projection: str = Form('unknown'), files: list[UploadFile] = File(...),
                idempotency_key: str | None = Header(None)):
         # Unknown projection is deliberately blocked; a filename cannot establish viewing geometry.
         if projection not in ('rectilinear', 'unknown'):
             raise S.DomainError('INVALID_INPUT', '不支持的投影声明', 422)
-        cid = uid('clip')
-        target = settings.data_dir / 'tmp' / f'{cid}.upload'
         import hashlib
-        sha = hashlib.sha256()
-        size = 0
+        staged, failures = [], []
+        for upload in files:
+            cid, sha, size = uid('clip'), hashlib.sha256(), 0
+            target = settings.data_dir / 'imports' / f'{cid}.upload'
+            try:
+                with target.open('xb') as dest:
+                    while block := upload.file.read(1024 * 1024):
+                        size += len(block)
+                        if size > settings.max_source_bytes:
+                            raise S.DomainError('INVALID_INPUT', '文件超过源文件大小上限', 413)
+                        if shutil.disk_usage(target.parent).free < settings.min_free_bytes + len(block):
+                            raise S.DomainError('STORAGE_FULL', '可用空间不足', 507)
+                        sha.update(block)
+                        dest.write(block)
+                if not size:
+                    raise S.DomainError('INVALID_INPUT', '空文件不能导入', 422)
+                staged.append(dict(cid=cid, filename=Path(upload.filename or '本地视频').name,
+                                   target=target, size=size, sha256=sha.hexdigest()))
+            except S.DomainError as exc:
+                target.unlink(missing_ok=True)
+                failures.append(dict(filename=Path(upload.filename or '本地视频').name, status='failed',
+                                     error=dict(code=exc.code, message=exc.message, retryable=exc.retryable,
+                                                action=exc.action, job_id=None)))
         try:
-            with target.open('wb') as dest:
-                while block := file.file.read(1024 * 1024):
-                    size += len(block)
-                    if size > settings.max_source_bytes:
-                        raise S.DomainError('INVALID_INPUT', '文件超过源文件大小上限', 413)
-                    if shutil.disk_usage(target.parent).free < settings.min_free_bytes:
-                        raise S.DomainError('STORAGE_FULL', '可用空间不足', 507)
-                    sha.update(block)
-                    dest.write(block)
-            if not size:
-                raise S.DomainError('INVALID_INPUT', '空文件不能导入', 422)
+            fingerprint = dict(expected_revision=expected_revision, projection=projection,
+                               files=[(x['filename'], x['size'], x['sha256']) for x in staged],
+                               failures=[x['filename'] for x in failures])
             def action(db):
                 p = repo.project(db, pid)
                 repo.expect(p, expected_revision)
                 if not p['confirmed']:
                     raise S.DomainError('CONFLICT', '先确认分镜清单')
-                c = dict(id=cid, name=Path(file.filename or '本地视频').name, group_key=f'local:{sha.hexdigest()}',
-                         state='awaiting_ready', active=True, generation=1, rendition_id=None, duration=None,
-                         error=None, job_id=None, local_source=str(target), projection=projection)
-                old = next((x for x in p['clips'] if x['group_key'] == c['group_key']), None)
-                if old:
-                    return repo.job(db, old['job_id'])
-                p['clips'].append(c)
-                service.queue_clip(db, p, c)
-                repo.save(db, p)
-                return repo.job(db, c['job_id'])
-            result = mutate(request, dict(sha256=sha.hexdigest(), expected_revision=expected_revision,
-                                          projection=projection), idempotency_key, action)
-            with repo.transaction() as db:
-                referenced = any(c.get('local_source') == str(target) for c in repo.project(db, pid)['clips'])
-            if not referenced:
-                target.unlink(missing_ok=True)
+                items = list(failures)
+                for item in staged:
+                    old = next((c for c in p['clips'] if c['group_key'] == f"local:{item['sha256']}"), None)
+                    if old:
+                        items.append(dict(filename=item['filename'], status='duplicate', clip_id=old['id'], job_id=old['job_id']))
+                        continue
+                    c = dict(id=item['cid'], name=item['filename'], group_key=f"local:{item['sha256']}", source='local',
+                             size=item['size'], sha256=item['sha256'], state='awaiting_ready', active=True, generation=1,
+                             rendition_id=None, duration=None, error=None, job_id=None,
+                             local_source=str(item['target']), projection=projection)
+                    p['clips'].append(c)
+                    service.queue_clip(db, p, c)
+                    items.append(dict(filename=item['filename'], status='accepted', clip_id=c['id'], job_id=c['job_id']))
+                if any(item['status'] == 'accepted' for item in items):
+                    repo.save(db, p)
+                return dict(revision=p['revision'], items=items)
+            result = mutate(request, fingerprint, idempotency_key, action)
+            referenced = {i['clip_id'] for i in result['items'] if i['status'] == 'accepted'}
+            for item in staged:
+                if item['cid'] not in referenced:
+                    item['target'].unlink(missing_ok=True)
             return result
         except BaseException:
-            target.unlink(missing_ok=True)
+            for item in staged:
+                item['target'].unlink(missing_ok=True)
             raise
 
     dist = Path(__file__).resolve().parents[3] / 'frontend' / 'dist'

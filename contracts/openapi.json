@@ -403,10 +403,10 @@
         }
       }
     },
-    "/api/v1/projects/{pid}/snapshot": {
-      "get": {
-        "summary": "Snapshot",
-        "operationId": "snapshot_api_v1_projects__pid__snapshot_get",
+    "/api/v1/projects/{pid}/analysis:authorize": {
+      "post": {
+        "summary": "Authorize Analysis",
+        "operationId": "authorize_analysis_api_v1_projects__pid__analysis_authorize_post",
         "parameters": [
           {
             "name": "pid",
@@ -416,483 +416,6 @@
               "type": "string",
               "pattern": "^[a-zA-Z0-9_-]{1,100}$",
               "title": "Pid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Snapshot"
-                }
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/devices:connect": {
-      "post": {
-        "summary": "Connect",
-        "operationId": "connect_api_v1_devices_connect_post",
-        "parameters": [
-          {
-            "name": "idempotency-key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Idempotency-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Connect"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
-                }
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/devices/{did}": {
-      "get": {
-        "summary": "Device",
-        "operationId": "device_api_v1_devices__did__get",
-        "parameters": [
-          {
-            "name": "did",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Did"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Device"
-                }
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/devices/{did}/scans": {
-      "post": {
-        "summary": "Scan",
-        "operationId": "scan_api_v1_devices__did__scans_post",
-        "parameters": [
-          {
-            "name": "did",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Did"
-            }
-          },
-          {
-            "name": "idempotency-key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Idempotency-Key"
-            }
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
-                }
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/devices/{did}/catalog": {
-      "get": {
-        "summary": "Catalog",
-        "operationId": "catalog_api_v1_devices__did__catalog_get",
-        "parameters": [
-          {
-            "name": "did",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Did"
-            }
-          },
-          {
-            "name": "snapshot_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Snapshot Id"
-            }
-          },
-          {
-            "name": "cursor",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Cursor"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "maximum": 100,
-              "minimum": 1,
-              "default": 100,
-              "title": "Limit"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Catalog"
-                }
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/projects/{pid}/sync-sessions": {
-      "post": {
-        "summary": "Start Sync",
-        "operationId": "start_sync_api_v1_projects__pid__sync_sessions_post",
-        "parameters": [
-          {
-            "name": "pid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Pid"
-            }
-          },
-          {
-            "name": "idempotency-key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Idempotency-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Scope"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/sync-sessions/{sid}/scope:confirm": {
-      "post": {
-        "summary": "Scope",
-        "operationId": "scope_api_v1_sync_sessions__sid__scope_confirm_post",
-        "parameters": [
-          {
-            "name": "sid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Sid"
-            }
-          },
-          {
-            "name": "idempotency-key",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Idempotency-Key"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ConfirmScope"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Conflict"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Unprocessable Content"
-          }
-        }
-      }
-    },
-    "/api/v1/sync-sessions/{sid}/{action}": {
-      "post": {
-        "summary": "Session Action",
-        "operationId": "session_action_api_v1_sync_sessions__sid___action__post",
-        "parameters": [
-          {
-            "name": "sid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-              "title": "Sid"
-            }
-          },
-          {
-            "name": "action",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Action"
             }
           },
           {
@@ -927,7 +450,59 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/projects/{pid}/snapshot": {
+      "get": {
+        "summary": "Snapshot",
+        "operationId": "snapshot_api_v1_projects__pid__snapshot_get",
+        "parameters": [
+          {
+            "name": "pid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-]{1,100}$",
+              "title": "Pid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
               }
             }
           },
@@ -1388,7 +963,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Job"
+                  "$ref": "#/components/schemas/ImportBatch"
                 }
               }
             }
@@ -1430,68 +1005,21 @@
             "title": "Projection",
             "default": "unknown"
           },
-          "file": {
-            "type": "string",
-            "contentMediaType": "application/octet-stream",
-            "title": "File"
+          "files": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "Files"
           }
         },
         "type": "object",
         "required": [
           "expected_revision",
-          "file"
+          "files"
         ],
         "title": "Body_upload_api_v1_projects__pid__imports_post"
-      },
-      "Catalog": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Id"
-          },
-          "device_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Device Id",
-            "default": "camera_demo"
-          },
-          "complete": {
-            "type": "boolean",
-            "title": "Complete",
-            "default": true
-          },
-          "completed_at": {
-            "type": "number",
-            "title": "Completed At"
-          },
-          "groups": {
-            "items": {
-              "$ref": "#/components/schemas/Group"
-            },
-            "type": "array",
-            "title": "Groups"
-          },
-          "next_cursor": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Next Cursor"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "id",
-          "completed_at",
-          "groups"
-        ],
-        "title": "Catalog"
       },
       "Clip": {
         "properties": {
@@ -1577,6 +1105,36 @@
               }
             ],
             "title": "Job Id"
+          },
+          "source": {
+            "type": "string",
+            "const": "local",
+            "title": "Source",
+            "default": "local"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
           }
         },
         "additionalProperties": false,
@@ -1617,65 +1175,13 @@
         ],
         "title": "ClipPage"
       },
-      "ConfirmScope": {
-        "properties": {
-          "expected_revision": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Expected Revision"
-          },
-          "snapshot_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Snapshot Id"
-          },
-          "include_group_ids": {
-            "items": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$"
-            },
-            "type": "array",
-            "title": "Include Group Ids"
-          },
-          "exclude_group_ids": {
-            "items": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$"
-            },
-            "type": "array",
-            "title": "Exclude Group Ids"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "expected_revision",
-          "snapshot_id",
-          "include_group_ids",
-          "exclude_group_ids"
-        ],
-        "title": "ConfirmScope"
-      },
-      "Connect": {
-        "properties": {
-          "profile_id": {
-            "type": "string",
-            "enum": [
-              "simulator",
-              "x5"
-            ],
-            "title": "Profile Id"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "profile_id"
-        ],
-        "title": "Connect"
-      },
       "CreateProject": {
         "properties": {
+          "model_upload_consent": {
+            "type": "boolean",
+            "title": "Model Upload Consent",
+            "default": false
+          },
           "goal": {
             "type": "string",
             "maxLength": 2000,
@@ -1735,54 +1241,6 @@
         ],
         "title": "Criterion"
       },
-      "Device": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Id"
-          },
-          "connection_state": {
-            "type": "string",
-            "title": "Connection State"
-          },
-          "mode": {
-            "type": "string",
-            "title": "Mode"
-          },
-          "firmware": {
-            "type": "string",
-            "title": "Firmware"
-          },
-          "capabilities": {
-            "additionalProperties": {
-              "type": "string",
-              "enum": [
-                "supported",
-                "unsupported",
-                "unknown"
-              ]
-            },
-            "type": "object",
-            "title": "Capabilities"
-          },
-          "evidence": {
-            "type": "string",
-            "title": "Evidence"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "id",
-          "connection_state",
-          "mode",
-          "firmware",
-          "capabilities",
-          "evidence"
-        ],
-        "title": "Device"
-      },
       "ErrorCode": {
         "type": "string",
         "enum": [
@@ -1796,6 +1254,7 @@
           "STORAGE_FULL",
           "NETWORK_UNAVAILABLE",
           "MODEL_TIMEOUT",
+          "MODEL_UPLOAD_NOT_AUTHORIZED",
           "MODEL_OUTPUT_INVALID",
           "STALE_REVISION",
           "CONFLICT",
@@ -1936,99 +1395,11 @@
         ],
         "title": "Evidence"
       },
-      "Group": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Id"
-          },
-          "revision": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Revision"
-          },
-          "name": {
-            "type": "string",
-            "title": "Name"
-          },
-          "storage_epoch": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Storage Epoch",
-            "default": "card_demo"
-          },
-          "members": {
-            "items": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$"
-            },
-            "type": "array",
-            "minItems": 1,
-            "title": "Members"
-          },
-          "sizes": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "minItems": 1,
-            "title": "Sizes"
-          },
-          "closed": {
-            "type": "boolean",
-            "title": "Closed",
-            "default": false
-          },
-          "complete": {
-            "type": "boolean",
-            "title": "Complete",
-            "default": false
-          },
-          "projection": {
-            "type": "string",
-            "enum": [
-              "rectilinear",
-              "unknown",
-              "panorama"
-            ],
-            "title": "Projection",
-            "default": "unknown"
-          },
-          "scenario": {
-            "type": "string",
-            "enum": [
-              "materials",
-              "result",
-              "occluded",
-              "clear",
-              "unrelated",
-              "uncertain"
-            ],
-            "title": "Scenario",
-            "default": "unrelated"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "id",
-          "revision",
-          "name",
-          "members",
-          "sizes"
-        ],
-        "title": "Group"
-      },
       "Health": {
         "properties": {
           "status": {
             "type": "string",
             "title": "Status"
-          },
-          "camera_mode": {
-            "type": "string",
-            "title": "Camera Mode"
           },
           "model_mode": {
             "type": "string",
@@ -2047,12 +1418,91 @@
         "type": "object",
         "required": [
           "status",
-          "camera_mode",
           "model_mode",
           "worker",
           "database"
         ],
         "title": "Health"
+      },
+      "ImportBatch": {
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ImportItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "revision",
+          "items"
+        ],
+        "title": "ImportBatch"
+      },
+      "ImportItem": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "accepted",
+              "duplicate",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "clip_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_-]{1,100}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clip Id"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_-]{1,100}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "filename",
+          "status"
+        ],
+        "title": "ImportItem"
       },
       "Job": {
         "properties": {
@@ -2219,6 +1669,11 @@
       },
       "Project": {
         "properties": {
+          "model_upload_consent": {
+            "type": "boolean",
+            "title": "Model Upload Consent",
+            "default": false
+          },
           "id": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9_-]{1,100}$",
@@ -2333,124 +1788,6 @@
         ],
         "title": "Revision"
       },
-      "Scope": {
-        "properties": {
-          "expected_revision": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Expected Revision"
-          },
-          "device_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Device Id"
-          },
-          "snapshot_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Snapshot Id"
-          },
-          "selected_group_ids": {
-            "items": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9_-]{1,100}$"
-            },
-            "type": "array",
-            "title": "Selected Group Ids"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "expected_revision",
-          "device_id",
-          "snapshot_id",
-          "selected_group_ids"
-        ],
-        "title": "Scope"
-      },
-      "Session": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Id"
-          },
-          "project_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Project Id"
-          },
-          "device_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Device Id"
-          },
-          "state": {
-            "type": "string",
-            "enum": [
-              "watching",
-              "awaiting_scope",
-              "paused",
-              "disconnected",
-              "error",
-              "closed"
-            ],
-            "title": "State"
-          },
-          "snapshot_id": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9_-]{1,100}$",
-            "title": "Snapshot Id"
-          },
-          "last_complete_scan_at": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Last Complete Scan At"
-          },
-          "membership": {
-            "additionalProperties": {
-              "type": "string",
-              "enum": [
-                "included",
-                "excluded",
-                "pending_confirmation"
-              ]
-            },
-            "type": "object",
-            "title": "Membership"
-          },
-          "storage_epoch": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^[a-zA-Z0-9_-]{1,100}$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Storage Epoch"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "id",
-          "project_id",
-          "device_id",
-          "state",
-          "snapshot_id",
-          "membership"
-        ],
-        "title": "Session"
-      },
       "Shot": {
         "properties": {
           "id": {
@@ -2564,35 +1901,14 @@
             "type": "integer",
             "title": "Plan Version"
           },
-          "camera_mode": {
-            "type": "string",
-            "enum": [
-              "simulator",
-              "unconfigured"
-            ],
-            "title": "Camera Mode"
-          },
           "model_mode": {
             "type": "string",
             "enum": [
               "simulator",
+              "qwen",
               "unconfigured"
             ],
             "title": "Model Mode"
-          },
-          "sync": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/Session"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "pending_scope_count": {
-            "type": "integer",
-            "title": "Pending Scope Count"
           },
           "pipeline": {
             "additionalProperties": {
@@ -2631,7 +1947,6 @@
             "enum": [
               "not_ready",
               "checking",
-              "unverified",
               "ready"
             ],
             "title": "Readiness"
@@ -2646,18 +1961,6 @@
               }
             ],
             "title": "Checked At"
-          },
-          "verified_snapshot_id": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^[a-zA-Z0-9_-]{1,100}$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Verified Snapshot Id"
           },
           "next_action": {
             "anyOf": [
@@ -2684,10 +1987,7 @@
           "project_id",
           "revision",
           "plan_version",
-          "camera_mode",
           "model_mode",
-          "sync",
-          "pending_scope_count",
           "pipeline",
           "clips",
           "evidence",
@@ -2695,7 +1995,6 @@
           "coverage_complete",
           "readiness",
           "checked_at",
-          "verified_snapshot_id",
           "next_action",
           "jobs"
         ],

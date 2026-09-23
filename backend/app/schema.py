@@ -21,6 +21,7 @@ class ErrorCode(StrEnum):
     STORAGE_FULL = 'STORAGE_FULL'
     NETWORK_UNAVAILABLE = 'NETWORK_UNAVAILABLE'
     MODEL_TIMEOUT = 'MODEL_TIMEOUT'
+    MODEL_UPLOAD_NOT_AUTHORIZED = 'MODEL_UPLOAD_NOT_AUTHORIZED'
     MODEL_OUTPUT_INVALID = 'MODEL_OUTPUT_INVALID'
     STALE_REVISION = 'STALE_REVISION'
     CONFLICT = 'CONFLICT'
@@ -65,6 +66,7 @@ class Shot(Schema):
 
 
 class CreateProject(Schema):
+    model_upload_consent: bool = False
     goal: str = Field(min_length=1, max_length=2000)
     target_seconds: int = Field(default=45, ge=30, le=60)
     conditions: str = Field(default='', max_length=2000)
@@ -115,6 +117,7 @@ class Group(Schema):
     storage_epoch: ID = 'card_demo'
     members: list[ID] = Field(min_length=1)
     sizes: list[int] = Field(min_length=1)
+    media_members: list[ID] | None = None
     closed: bool = False
     complete: bool = False
     projection: Literal['rectilinear', 'unknown', 'panorama'] = 'unknown'
@@ -125,6 +128,8 @@ class Group(Schema):
     def files(self):
         if len(self.members) != len(self.sizes) or len(set(self.members)) != len(self.members):
             raise ValueError('成员与大小不匹配')
+        if self.media_members is not None and not set(self.media_members) <= set(self.members):
+            raise ValueError('原片必须是组内成员')
         if any(size <= 0 for size in self.sizes):
             raise ValueError('文件大小必须为正')
         return self
@@ -175,6 +180,7 @@ class Job(Schema):
 
 
 class Project(Schema):
+    model_upload_consent: bool = False
     id: ID
     goal: str
     target_seconds: int
@@ -198,6 +204,9 @@ class Clip(Schema):
     duration: float | None = None
     error: ErrorDetail | None = None
     job_id: ID | None = None
+    source: Literal['local'] = 'local'
+    size: int | None = Field(default=None, ge=1)
+    sha256: str | None = Field(default=None, pattern=r'^[0-9a-f]{64}$')
 
 
 class Session(Schema):
@@ -233,18 +242,14 @@ class Snapshot(Schema):
     project_id: ID
     revision: int
     plan_version: int
-    camera_mode: Literal['simulator', 'unconfigured']
-    model_mode: Literal['simulator', 'unconfigured']
-    sync: Session | None
-    pending_scope_count: int
+    model_mode: Literal['simulator', 'qwen', 'unconfigured']
     pipeline: dict[str, int]
     clips: list[Clip]
     evidence: list[Evidence]
     shots: list[ShotCoverage]
     coverage_complete: bool
-    readiness: Literal['not_ready', 'checking', 'unverified', 'ready']
+    readiness: Literal['not_ready', 'checking', 'ready']
     checked_at: float | None
-    verified_snapshot_id: ID | None
     next_action: NextAction | None
     jobs: list[Job]
 
@@ -261,10 +266,22 @@ class ClipPage(Schema):
 
 class Health(Schema):
     status: str
-    camera_mode: str
     model_mode: str
     worker: str
     database: str
+
+
+class ImportItem(Schema):
+    filename: str
+    status: Literal['accepted', 'duplicate', 'failed']
+    clip_id: ID | None = None
+    job_id: ID | None = None
+    error: ErrorDetail | None = None
+
+
+class ImportBatch(Schema):
+    revision: int
+    items: list[ImportItem]
 
 
 class Device(Schema):

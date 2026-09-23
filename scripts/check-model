@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+source "$(dirname "$0")/_common"
+PYTHONPATH=. .venv/bin/python - <<'PY'
+from backend.app.analysis.qwen import QwenModel
+from backend.app.config import Settings
+
+settings = Settings.from_env()
+model = QwenModel(settings)
+if not model.configured:
+    raise SystemExit('Qwen VL 未配置：请在 .env 设置 DASHSCOPE_API_KEY')
+
+shots, record = model.plan('把测试物品放到桌面上', '模型连通性检查，不上传视频', 30)
+if not shots:
+    raise SystemExit('Qwen VL 返回了空分镜')
+print(f"Qwen VL 可用：model={record['model']} prompt={record['prompt_version']} shots={len(shots)}")
+print(f"usage={record['usage']} elapsed_seconds={record['elapsed_seconds']}")
+PY
