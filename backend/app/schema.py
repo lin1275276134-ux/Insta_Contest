@@ -259,6 +259,11 @@ class ProjectPage(Schema):
     next_cursor: str | None = None
 
 
+class DeletedProject(Schema):
+    id: ID
+    deleted: bool = True
+
+
 class ClipPage(Schema):
     items: list[Clip]
     next_cursor: str | None = None

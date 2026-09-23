@@ -23,11 +23,16 @@ scripts/setup
 ## 运行
 
 ```bash
-scripts/start --simulate   # 本地启动（模拟模型），随后打开 http://127.0.0.1:8765
-scripts/stop               # 优雅停止；项目、任务与媒体全部保留
+scripts/start --simulate   # 前台启动（模拟模型）；按 Ctrl+C 可安全停止
+scripts/start --simulate --background  # 明确选择后台运行
+scripts/status             # 查看服务状态和 PID
+scripts/stop               # 优雅停止后台服务；项目、任务与媒体全部保留
 scripts/dev --simulate     # 开发模式，带 Vite 热更新
 scripts/check-model        # 不上传视频，验证 Qwen VL 密钥、地域、模型权限和结构化输出
 ```
+
+默认以前台模式运行，终端中的 `Ctrl+C` 会直接触发 Uvicorn 和后台任务的优雅退出；只有传入
+`--background` 才会脱离终端，此时使用 `scripts/status` 查看状态、`scripts/stop` 停止服务。
 
 `--simulate` 必须显式给出。不给出时需要配置真实模型；未配置或未授权时会返回明确错误，
 不会把模拟结果当作真实视觉结论。

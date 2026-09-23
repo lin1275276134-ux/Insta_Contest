@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { api, prefix, acceptSnapshot, waitJob, withResync } from './api';
+import { api, prefix, acceptSnapshot, waitJob, withResync, requestKey, uploadLocalFiles } from './api';
 import type { Snapshot, Project, Shot, Job, Evidence } from './api';
 import './style.css';
+import './home.css';
 
 const names: Record<string, string> = {
   pending: '待拍', covered: '已覆盖', reshoot: '需补拍', uncertain: '待确认',
@@ -23,7 +24,9 @@ function App() {
   const [goal, setGoal] = useState('');
   const [conditions, setConditions] = useState('');
   const [seconds, setSeconds] = useState(45);
-  const [creating, setCreating] = useState(!pid);
+  const [home, setHome] = useState(true);
+  const [creating, setCreating] = useState(false);
+  const [deleting, setDeleting] = useState<Project | null>(null);
   const [draft, setDraft] = useState<Shot[]>([]);
   const [playing, setPlaying] = useState<{rid: string; start: number; title: string} | null>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -60,6 +63,9 @@ function App() {
     api<{model_mode: string}>('/health').then(h => setModelMode(h.model_mode)).catch(e => setError(e.message));
   }, []);
   useEffect(() => {
+    if (home) listProjects().catch(e => setError(e.message));
+  }, [home]);
+  useEffect(() => {
     localStorage.setItem('bold.project', pid);
     latest.current = null;
     setSnap(null); setPlaying(null); confirmedVersion.current = '';
@@ -79,19 +85,52 @@ function App() {
   const covered = snap?.shots.filter(s => s.required && s.state === 'covered').length ?? 0;
   const required = snap?.shots.filter(s => s.required).length ?? 0;
 
+  function openProject(id: string) {
+    setError(''); setHome(false); setCreating(false); setPid(id);
+  }
+  async function deleteProject(project: Project) {
+    setBusy(true); setError('');
+    try {
+      await api(`/projects/${project.id}`, 'DELETE', {expected_revision: project.revision});
+      if (pidRef.current === project.id) {
+        pidRef.current = ''; setPid(''); localStorage.removeItem('bold.project');
+      }
+      setDeleting(null);
+      await listProjects();
+    } catch (e) { setError((e as Error).message); }
+    finally { setBusy(false); }
+  }
+
   return <div className="app">
-    <header><a className="brand" href="/">拍够了吗<span>？</span></a><span className="tag">拍摄工作台</span>
+    <header><a className="brand" href="/" onClick={e => {e.preventDefault(); setHome(true); setCreating(false);}}>拍够了吗<span>？</span></a><span className="tag">拍摄工作台</span>
       <div className="header-right"><span className="mode">{modelMode === 'simulator' ? '本地视频 · 模拟模型' : modelMode === 'qwen' ? '本地视频 · 千问视觉模型' : '本地视频 · 模型待配置'}</span>
-      <button className="quiet" onClick={() => setCreating(true)}>＋ 新建项目</button></div></header>
+      <button className="quiet" onClick={() => {setHome(false); setCreating(true);}}>＋ 新建项目</button></div></header>
     <div className="statusbar"><span><i className="dot green"/>本地视频工作区</span>
-      <span>处理 / 分析：{snap ? `${snap.pipeline.running} 处理中 · ${snap.pipeline.waiting} 等待 · ${snap.pipeline.failed} 失败` : '—'}</span>
+      <span>{home ? `项目：${projects.length} 个` : `处理 / 分析：${snap ? `${snap.pipeline.running} 处理中 · ${snap.pipeline.waiting} 等待 · ${snap.pipeline.failed} 失败` : '—'}`}</span>
       <span>模型：{modelMode === 'simulator' ? '固定标注，仅验证程序流程' : modelMode === 'qwen' ? '千问视觉模型' : '待配置'}</span></div>
     {error && <div className="error" role="alert">{error}<button onClick={() => setError('')}>关闭</button></div>}
-    {creating ? <main className="creation"><div className="eyebrow">开始一次有准备的拍摄</div><h1>你想拍出一条什么样的视频？</h1><p className="muted">说清成片目标，我们把它拆成可以看见、可以检查的必拍内容，帮你发现还缺什么。</p>
-      <form onSubmit={e => {e.preventDefault(); const key = crypto.randomUUID(); act(async () => {
+    {home ? <main className="project-home">
+      <section className="home-hero"><div><div className="eyebrow">你的拍摄空间</div><h1>今天想拍点什么？</h1><p className="muted">从一个清晰的目标开始，或者继续完善已有项目。</p></div>
+        <button className="primary new-project" onClick={() => {setHome(false); setCreating(true);}}><span>＋</span><span><strong>新建项目</strong><small>生成一份新的拍摄清单</small></span></button>
+      </section>
+      <section className="project-section"><div className="project-section-title"><div><h2>已有项目</h2><p>{projects.length ? `共 ${projects.length} 个项目` : '还没有项目，从第一个拍摄目标开始吧'}</p></div></div>
+        {projects.length ? <div className="project-grid">{projects.map(project => {
+          const stage = project.confirmed ? '拍摄进行中' : project.shots.length ? '待确认分镜' : '正在准备';
+          return <article className="project-card" key={project.id}>
+            <button className="project-open" onClick={() => openProject(project.id)} aria-label={`进入项目：${project.goal}`}>
+              <div className="project-card-top"><span className={`project-state ${project.confirmed ? 'active' : ''}`}>{stage}</span><span className="arrow">↗</span></div>
+              <h3>{project.goal}</h3><p>{project.conditions || '暂无拍摄条件说明'}</p>
+              <div className="project-meta"><span>{project.target_seconds} 秒成片</span><span>{project.shots.length} 个分镜</span><span>{new Date(project.created_at * 1000).toLocaleDateString('zh-CN')}</span></div>
+            </button>
+            <div className="project-card-actions"><button onClick={() => openProject(project.id)}>进入项目</button><button className="danger-quiet" onClick={() => setDeleting(project)} aria-label={`删除项目：${project.goal}`}>删除</button></div>
+          </article>;
+        })}</div> : <div className="projects-empty"><div className="empty-mark">◎</div><h3>还没有拍摄项目</h3><p>创建项目后，你可以在这里随时继续、管理或删除。</p><button className="primary" onClick={() => {setHome(false); setCreating(true);}}>创建第一个项目</button></div>}
+      </section>
+    </main> : creating ? <main className="creation"><button className="back-link" onClick={() => {setHome(true); setCreating(false);}}>← 返回项目首页</button><div className="eyebrow">开始一次有准备的拍摄</div><h1>你想拍出一条什么样的视频？</h1><p className="muted">说清成片目标，我们把它拆成可以看见、可以检查的必拍内容，帮你发现还缺什么。</p>
+      <form onSubmit={e => {e.preventDefault(); const key = requestKey(); act(async () => {
         // Reusing the key across a retry keeps it from creating a second project.
         const p = await api<Project>('/projects', 'POST', {goal, target_seconds: seconds, conditions, model_upload_consent:modelConsent}, key);
-        pidRef.current = p.id; setPid(p.id); setCreating(false);
+        pidRef.current = p.id; setPid(p.id); setCreating(false); setHome(false);
         const job = await api<Job>(`/projects/${p.id}/plan:generate`, 'POST', {expected_revision:p.revision});
         await waitJob(job.id);
       });}}>
@@ -100,11 +139,11 @@ function App() {
         <label className="grow">拍摄条件<input maxLength={2000} placeholder="例如：一个人拍摄，室内桌面" value={conditions} onChange={e => setConditions(e.target.value)}/></label></div>
         {modelMode !== 'simulator' && <label className="check"><input type="checkbox" checked={modelConsent} onChange={e => setModelConsent(e.target.checked)}/>允许将本项目纳入的素材分析副本发送至千问模型服务，会消耗模型额度。原片保留在本机。</label>}
         <button className="primary" disabled={busy || !goal.trim()}>{busy ? '正在生成…' : '创建项目并生成分镜 →'}</button>
-        {projects.length > 0 && <button type="button" className="quiet" onClick={() => {setCreating(false); if (!pid) setPid(projects[0].id);}}>返回已有项目</button>}
+        <button type="button" className="quiet" onClick={() => {setCreating(false); setHome(true);}}>取消</button>
       </form><div className="note">{modelMode === 'simulator' ? '当前为模拟演示：生成通用分镜草稿，素材观察使用固定测试标注，不进行真实视觉识别。' : modelMode === 'qwen' ? '真实模型将分析上传的普通视角视频，生成结果需你确认。' : '请先配置真实模型，或按 README 显式启动模拟模式。'}</div>
     </main> : snap ? <>
-      <section className="projectbar"><div><div className="eyebrow">拍摄项目 / {snap.project.target_seconds} 秒</div><h1>{snap.project.goal}</h1></div>
-        <select aria-label="选择项目" value={pid} onChange={e => setPid(e.target.value)}>{projects.map(p => <option value={p.id} key={p.id}>{p.goal}</option>)}</select>
+      <section className="projectbar"><div><button className="back-link" onClick={() => setHome(true)}>← 全部项目</button><div className="eyebrow">拍摄项目 / {snap.project.target_seconds} 秒</div><h1>{snap.project.goal}</h1></div>
+        <button className="danger-quiet" onClick={() => setDeleting(snap.project)}>删除项目</button>
       </section>
       {modelMode !== 'simulator' && !snap.project.model_upload_consent && <section className="panel"><p>视频已保留在本地。启用视觉分析后，本项目纳入的素材副本将发送至千问模型服务并消耗额度。</p><button disabled={busy} onClick={() => act(async () => {await api(`/projects/${pid}/analysis:authorize`, 'POST', {expected_revision:rev()});})}>允许本项目上传分析副本</button></section>}
       {!snap.project.confirmed ? <section className="plan panel"><div className="eyebrow">01 / 确认拍摄清单</div><h2>每个镜头，都有明确的通过标准。</h2><p className="muted">修改分镜与标准后确认。锁定后将按照这份清单检查素材。</p>
@@ -120,10 +159,13 @@ function App() {
       </section> : <>
         <section className="connect panel"><div><h2>导入本地视频</h2><p className="muted">可一次选择多个普通视角视频；每段素材会独立校验、处理和分析。</p></div>
           <div><label className="check"><input type="checkbox" checked={ordinary} onChange={e => setOrdinary(e.target.checked)}/>我确认所选文件是普通视角视频</label>
-          <input type="file" multiple accept="video/*" disabled={busy || !ordinary} aria-label="导入本地视频" onChange={e => {const files=Array.from(e.target.files ?? []); if(!files.length)return; act(async () => {
-            const form = new FormData(); files.forEach(file => form.append('files', file)); form.set('expected_revision', String(rev())); form.set('projection', 'rectilinear');
-            const r = await fetch(`${prefix}/projects/${pid}/imports`, {method:'POST', body:form, headers:{'Idempotency-Key':crypto.randomUUID()}}); const result=await r.json(); if(!r.ok)throw new Error(result.error?.message ?? '导入失败');
-          }); e.target.value='';}}/></div></section>
+          <input type="file" multiple accept="video/*" disabled={busy || !ordinary} aria-label="导入本地视频" onChange={e => {
+            const input = e.currentTarget;
+            const files = Array.from(input.files ?? []);
+            if (!files.length) return;
+            act(async () => { await uploadLocalFiles(pidRef.current, rev(), files); })
+              .finally(() => { input.value = ''; });
+          }}/></div></section>
         <main className="workspace">
           <section className="panel shots"><div className="sectiontitle"><h2>分镜进度</h2><span>{covered} / {required}</span></div><div className="progress"><div style={{width:`${required ? covered/required*100 : 0}%`}}/></div>
             {snap.shots.map((s,i) => <article className={`shot ${s.state}`} key={s.id}><div className="shothead"><span className="number">0{i+1}</span><span className="badge">{names[s.state]}</span></div><h3>{s.title}</h3>
@@ -150,7 +192,8 @@ function App() {
           </aside>
         </main>
       </>}
-    </> : <main className="creation"><h2>正在打开项目…</h2><button onClick={() => setCreating(true)}>新建项目</button></main>}
+    </> : <main className="creation"><h2>正在打开项目…</h2><button onClick={() => {setHome(true); setCreating(false);}}>返回项目首页</button></main>}
+    {deleting && <div className="modal-backdrop" role="presentation" onMouseDown={e => {if (e.target === e.currentTarget) setDeleting(null);}}><div className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-title"><div className="delete-icon">×</div><h2 id="delete-title">删除这个项目？</h2><p>“{deleting.goal}”及其本地导入素材和分析结果将被永久删除，此操作无法撤销。</p><div className="dialog-actions"><button onClick={() => setDeleting(null)} disabled={busy}>取消</button><button className="danger" onClick={() => deleteProject(deleting)} disabled={busy}>{busy ? '正在删除…' : '确认删除'}</button></div></div></div>}
     <footer>拍够了吗？ <span>本地项目 · 原片保留 · 证据可回看</span></footer>
   </div>;
 }

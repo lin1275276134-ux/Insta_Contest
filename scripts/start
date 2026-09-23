@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 source "$(dirname "$0")/_common"
-if [[ "${1:-}" == '--simulate' ]]; then
-  export BOLD_SIMULATION=1
-  .venv/bin/python -m tools.simulator seed
-fi
+mode=run
+for argument in "$@"; do
+  case "$argument" in
+    --simulate) export BOLD_SIMULATION=1 ;;
+    --background) mode=background ;;
+    *) echo "用法：scripts/start [--simulate] [--background]" >&2; exit 2 ;;
+  esac
+done
+if [[ "${BOLD_SIMULATION:-}" == '1' ]]; then .venv/bin/python -m tools.simulator seed; fi
 if [[ ! -f frontend/dist/index.html ]]; then
   echo '请先运行 scripts/setup 或 npm --prefix frontend run build' >&2
   exit 1
 fi
-exec .venv/bin/python scripts/server.py start
+if [[ "$mode" == run ]]; then
+  echo '拍摄工作台将在前台运行；按 Ctrl+C 可安全停止。'
+fi
+exec .venv/bin/python scripts/server.py "$mode"

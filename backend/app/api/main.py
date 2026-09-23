@@ -43,7 +43,7 @@ def create_app(settings=None, run_worker=True):
     app.state.service, app.state.worker = service, worker
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=['localhost', '127.0.0.1', 'testserver'])
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.allowed_origins),
-                       allow_methods=['GET', 'POST', 'PATCH'], allow_headers=['Content-Type', 'Idempotency-Key'])
+                       allow_methods=['GET', 'POST', 'PATCH', 'DELETE'], allow_headers=['Content-Type', 'Idempotency-Key'])
 
     def error_response(exc, request_id=None):
         return JSONResponse(status_code=exc.status, content=dict(
@@ -100,6 +100,32 @@ def create_app(settings=None, run_worker=True):
         with repo.transaction() as db:
             items, next_cursor = paginate([public_project(p) for p in repo.projects(db)], cursor, limit, 'id')
             return dict(items=items, next_cursor=next_cursor)
+
+    @app.delete(PREFIX + '/projects/{pid}', response_model=S.DeletedProject)
+    def delete_project(pid: S.ID, body: S.Revision, request: Request,
+                       idempotency_key: str | None = Header(None)):
+        cleanup_paths: list[Path] = []
+
+        def action(db):
+            p = repo.project(db, pid)
+            repo.expect(p, body.expected_revision)
+            cleanup_paths.extend(Path(c['local_source']) for c in p['clips'] if c.get('local_source'))
+            cleanup_paths.extend(Path(r['path']) for r in p['renditions'] if r.get('path'))
+            db.execute('DELETE FROM jobs WHERE project_id=?', (pid,))
+            db.execute('DELETE FROM projects WHERE id=?', (pid,))
+            return dict(id=pid, deleted=True)
+
+        result = mutate(request, body.model_dump(), idempotency_key, action)
+        data_root = settings.data_dir.resolve()
+        for path in cleanup_paths:
+            resolved = path.resolve()
+            if resolved.is_relative_to(data_root):
+                resolved.unlink(missing_ok=True)
+                try:
+                    resolved.parent.rmdir()
+                except OSError:
+                    pass
+        return result
 
     @app.post(PREFIX + '/projects/{pid}/plan:generate', response_model=S.Job, status_code=202)
     def generate(pid: S.ID, body: S.Revision, request: Request, idempotency_key: str | None = Header(None)):

@@ -5,6 +5,7 @@ import fs from 'node:fs';
 test('local-video workspace: create, batch import, process, exclude, reinclude and refresh', async ({page}) => {
   await page.goto('/');
   await expect(page.getByText('本地视频 · 模拟模型')).toBeVisible();
+  await page.getByRole('button', {name:'创建第一个项目'}).click();
   await expect(page.getByRole('heading', {name:'你想拍出一条什么样的视频？'})).toBeVisible();
   await page.getByLabel('成片目标').fill('展示一家咖啡馆的环境和招牌饮品');
   await page.getByLabel('拍摄条件').fill('室内桌面，保持连接处无遮挡');
@@ -26,7 +27,12 @@ test('local-video workspace: create, batch import, process, exclude, reinclude a
   await first.getByRole('button',{name:'重新纳入',exact:true}).click();
   await expect(first).toContainText('分析完成', {timeout:30000});
   await page.reload();
+  await page.getByRole('button', {name:'进入项目：展示一家咖啡馆的环境和招牌饮品'}).click();
   await expect(page.locator('.clip')).toHaveCount(2);
+  await page.getByRole('button', {name:'全部项目'}).click();
+  await page.getByRole('button', {name:'删除项目：展示一家咖啡馆的环境和招牌饮品'}).click();
+  await page.getByRole('button', {name:'确认删除'}).click();
+  await expect(page.getByRole('heading', {name:'还没有拍摄项目'})).toBeVisible();
 });
 
 test('real Qwen video E2E when BOLD_E2E_VIDEO_FILES is supplied', async ({page}) => {
@@ -35,6 +41,7 @@ test('real Qwen video E2E when BOLD_E2E_VIDEO_FILES is supplied', async ({page})
     'Set BOLD_E2E_VIDEO_FILES to real local video paths and run without simulation.');
   await page.goto('/');
   await expect(page.getByText('本地视频 · 千问视觉模型')).toBeVisible();
+  await page.getByRole('button', {name:'创建第一个项目'}).click();
   await page.getByLabel('成片目标').fill(process.env.BOLD_E2E_GOAL ?? '展示真实拍摄场景的核心内容和代表性细节');
   await page.getByLabel('允许将本项目纳入的素材分析副本发送至千问模型服务').check();
   await page.getByRole('button', {name:'创建项目并生成分镜 →'}).click();
